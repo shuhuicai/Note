@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.UserMapper">
+    <select id="findUser" parameterType="com.vo.UserVo" resultMap="userMap">
+        select * from t_user t where t.is_valid=1
+
+        <if test="id!=null">
+            and t.id=#{id}
+        </if>
+
+        <if test="creator!=null and creator!=''">
+            and t.creator like "%"#{creator}"%"
+        </if>
+
+        <if test="createTime1!=null and createTime2!=null and createTime1!='' and createTime2!=''">
+            and t.create_time between #{createTime1} and #{createTime2}
+        </if>
+
+        <if test="account!=null and account!=''">
+            and t.account like "%"#{account}"%"
+        </if>
+
+        <if test="password!=null and password!=''">
+            and t.password=#{password}
+        </if>
+
+        order by create_time desc
+    </select>
+
+    <update id="updateUser" parameterType="com.vo.UserVo">
+        update t_user t set t.modify_time=(select now()),
+        <if test="account!=null">
+            t.account=#{account},
+        </if>
+
+        <if test="password!=null">
+            t.password=#{password},
+        </if>
+
+        <if test="role!=null">
+            t.role=#{role}
+        </if>
+
+        where t.is_valid=1 and t.id=#{id}
+    </update>
+
+    <update id="deleteUserById" parameterType="String">
+        update t_user t set t.is_valid=0,t.modify_time=(select now()) where t.id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <resultMap id="userMap" type="com.entity.User">
+        <result property="id" column="id"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifier" column="modifier"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="isValid" column="is_valid"/>
+        <result property="remarks" column="remarks"/>
+        <result property="account" column="account"/>
+        <result property="password" column="password"/>
+        <result property="role" column="role"/>
+    </resultMap>
+</mapper>

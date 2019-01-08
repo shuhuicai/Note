@@ -1,0 +1,99 @@
+package com.controller;
+
+import com.bean.UserBean;
+import com.entity.User;
+import com.service.UserService;
+import com.vo.UserVo;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+
+/**
+ * @author CAIYUHUI
+ * @create 2018/10/14 15:48
+ **/
+@Controller("com.controller.UserController")
+@RequestMapping("/user")
+public class UserController {
+
+    @Resource(name = "com.service.UserService")
+    private UserService userService;
+
+    /**
+     * 用户登录
+     *
+     * @param userVo 登录账号及密码
+     * @return true or false 登录成功与否
+     */
+    @RequestMapping(value="/login",method= RequestMethod.POST)
+    @ResponseBody
+    public boolean login(UserVo userVo) {
+        return userService.login(userVo);
+    }
+
+    /**
+     * 查询所有用户
+     * @param userVo 查询条件
+     * @return 返回查询结果
+     */
+    @RequestMapping(value="/queryUser",method = RequestMethod.POST)
+    @ResponseBody
+    public UserBean queryUser(@RequestBody UserVo userVo) {
+        return userService.findUser(userVo);
+    }
+
+    /**
+     * 修改用户信息
+     * @param userVo 修改用户账号，密码
+     * @return 返回所有有效的用户
+     */
+    @RequestMapping("/modifyUser")
+    @ResponseBody
+    public UserBean modifyUser(@RequestBody UserVo userVo) {
+//        System.out.println(userVo);
+        try {
+            userService.modifyUser(userVo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return userService.findUser(new UserVo());
+    }
+
+    /**
+     * 通过id值删除指定用户
+     * @param id 用户记录id
+     * @return 返回所有有效的用户
+     */
+    @RequestMapping("/deleteUser")
+    @ResponseBody
+    public UserBean deleteUser(String id) {
+        String[] ids=new String[]{id};
+        try {
+            userService.deleteUser(ids);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        System.out.println("接收到的id值："+id);
+        return userService.findUser(new UserVo());
+    }
+
+    /**
+     * 添加新的用户（角色目前只为普通用户1）
+     * @param user 用户信息
+     * @return 返回所有有效的用户
+     */
+    @RequestMapping("/addUser")
+    @ResponseBody
+    public UserBean addUser(@RequestBody User user) {
+        try {
+            userService.addUser(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return userService.findUser(new UserVo());
+    }
+}

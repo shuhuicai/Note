@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.TagMapper">
+    <select id="findTag" parameterType="com.vo.TagVo" resultMap="tagMap">
+        select * from t_tag t where t.is_valid=1
+        <if test="id!=null">
+            and t.id=#{id}
+        </if>
+
+        <if test="creator!=null">
+            and t.creator=#{creator}
+        </if>
+
+        <if test="createTime!=null">
+            and t.create_time=#{createTime}
+        </if>
+
+        <if test="tagContent!=null">
+            and t.tag_content like "%"#{tagContent}"%"
+        </if>
+
+        order by create_time desc
+    </select>
+
+    <update id="updateTag" parameterType="com.vo.TagVo">
+        update t_tag t set t.tag_content=#{tagContent},t.modify_time=(select now())
+        where t.is_valid=1 and t.id=#{id}
+    </update>
+
+    <update id="deleteTag" parameterType="String">
+        update t_tag t set t.is_valid=0,t.modify_time=(select now()) where t.id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <resultMap id="tagMap" type="com.entity.Tag">
+        <result property="id" column="id"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifier" column="modifier"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="isValid" column="is_valid"/>
+        <result property="remarks" column="remarks"/>
+        <result property="tagContent" column="tag_content"/>
+    </resultMap>
+</mapper>
