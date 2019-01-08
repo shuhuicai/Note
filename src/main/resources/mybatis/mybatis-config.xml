@@ -3,15 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-
-    <!--   重命名 -->
-  <!--  <typeAliases>
-        <package name="com.entity"/>
-        <package name="com.vo"/>
-    </typeAliases>
--->
+    <!-- 重命名 -->
+    <!-- <typeAliases> <package name="com.entity"/> <package name="com.vo"/> </typeAliases> -->
     <settings>
-        <setting name="logImpl" value="STDOUT_LOGGING"/>
+        <setting value="STDOUT_LOGGING" name="logImpl"/>
     </settings>
 </configuration>
 
