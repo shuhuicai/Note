@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
+import static com.util.Constant.filePath;
+
 /**
  * @author CAIYUHUI
  * @create 2018/12/22 23:14
@@ -16,9 +18,33 @@ import java.io.*;
 @RequestMapping("/image")
 public class ImageController {
 
-    @RequestMapping("/saveImage")
-    public void saveImage() {
+    @RequestMapping(value = "/saveImage", method = RequestMethod.POST)
+    public void saveImage(@RequestBody MultipartFile file, HttpServletRequest request, HttpServletRequest response) {
+        if (file != null) {
+            String fileName = file.getOriginalFilename();//文件上传过来的名字（包括后缀）
+            //获取文件类型（后缀）
+            String type = fileName.contains(".") ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
+            if (type != null) {
+                //只支持gif,png,jpg格式的文件
+                if ("GIF".equals(type.toUpperCase()) || "PNG".equals(type.toUpperCase()) || "JPG".equals(type.toUpperCase())) {
+                    //文件保存的名字
+                    String saveFileName = String.valueOf(System.currentTimeMillis()) + fileName;
+                    String path = filePath + "\\Images\\" + saveFileName;//文件保存的路径
 
+                    //转存文件到指定路径
+                    try {
+                        file.transferTo(new File(path));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    //格式不符合条件
+                }
+            } else {
+                //文件类型为空
+
+            }
+        }
     }
 
     /**
