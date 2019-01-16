@@ -19,7 +19,8 @@ import static com.util.Constant.filePath;
 public class ImageController {
 
     @RequestMapping(value = "/saveImage", method = RequestMethod.POST)
-    public void saveImage(@RequestBody MultipartFile file, HttpServletRequest request, HttpServletRequest response) {
+    @ResponseBody
+    public String saveImage(@RequestBody MultipartFile file, HttpServletRequest request, HttpServletRequest response) {
         if (file != null) {
             String fileName = file.getOriginalFilename();//文件上传过来的名字（包括后缀）
             //获取文件类型（后缀）
@@ -45,6 +46,7 @@ public class ImageController {
 
             }
         }
+        return "";
     }
 
     /**
