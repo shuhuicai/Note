@@ -34,7 +34,7 @@ public class FileUrlMappingService {
      * @param mapping 给外界访问的url  文件存放在磁盘的路径
      * @return 返回添加成功与否
      */
-    public boolean addUrl(FileUrlMapping mapping) {
+    public boolean addUrl(FileUrlMapping mapping) throws Exception {
         return mappingMapper.insert(mapping) > 0;
     }
 }
