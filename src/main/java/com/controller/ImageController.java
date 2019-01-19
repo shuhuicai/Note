@@ -3,13 +3,13 @@ package com.controller;
 import com.entity.FileUrlMapping;
 import com.entity.FolderTree;
 import com.service.FileUrlMappingService;
+import com.service.FolderTreeService;
 import com.service.ImageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.util.Constant.localIP;
@@ -28,19 +28,14 @@ public class ImageController {
     @Resource(name = "com.service.FileUrlMappingService")
     private FileUrlMappingService fileUrlMappingService;
 
-    /**
-     * 保存图片
-     *
-     * @param file     上传的文件
-     * @param request  http请求
-     * @param response http响应
-     * @return 返回
-     */
+    @Resource(name = "com.service.FolderTreeService")
+    private FolderTreeService folderTreeService;
+
     @RequestMapping(value = "/saveImage", method = RequestMethod.POST)
     @ResponseBody
-    public String saveImage(@RequestBody MultipartFile file, HttpServletRequest request, HttpServletRequest response) {
-        FolderTree ft = new FolderTree();//后期会修改去掉
-
+    public FolderTree saveImage(@RequestBody MultipartFile file, String parentId) {
+        String fileName = file.getOriginalFilename();
+        FolderTree ft = new FolderTree();
         String path = null;
         try { //先将文件保存到磁盘
             path = imageService.saveImage(file);
@@ -55,17 +50,20 @@ public class ImageController {
             mapping.setVisitUrl(visitUrl);
             mapping.setDiskUrl(path);
 
+            //将文件以文件夹的形式向folderTree数据库添加记录
+            ft.setIsFolder(0);
+            ft.setLabel(fileName);
+            ft.setParentId(parentId);
+            ft.setFileUrl(visitUrl);
+
             try {
                 fileUrlMappingService.addUrl(mapping);
-                //将文件以文件夹的形式向folderTree数据库添加记录
-
+                folderTreeService.createFolderOrFile(ft);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
-
-        return "";
+        return ft;
     }
 
     /**

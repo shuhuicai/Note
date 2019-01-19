@@ -48,7 +48,7 @@ public class ImageService {
     }
 
     /**
-     * 根据指定路径读取图片
+     * 根据指定路径读取图片并响应到前端
      *
      * @param path     文件保存路径
      * @param response 响应Http请求
