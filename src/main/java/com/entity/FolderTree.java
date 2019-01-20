@@ -17,6 +17,7 @@ public class FolderTree extends BaseEntity {
     private String parentId;//父目录的id值（第一级目录时，该值为0）
     private int isFolder;//判断该记录是否是文件夹(0否，1是)
     private String fileUrl;//若为文件，则记录保存该文件的url路径
+    private int fileType;//文件类型（图片0，）
 
     @TableField(exist = false)
     private List<FolderTree> children;//记录该文件夹的所有子目录  非数据库字段
@@ -61,6 +62,14 @@ public class FolderTree extends BaseEntity {
         this.children = children;
     }
 
+    public int getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(int fileType) {
+        this.fileType = fileType;
+    }
+
     @Override
     public String toString() {
         return "FolderTree{" +
@@ -68,6 +77,7 @@ public class FolderTree extends BaseEntity {
                 ", parentId='" + parentId + '\'' +
                 ", isFolder=" + isFolder +
                 ", fileUrl='" + fileUrl + '\'' +
+                ", fileType=" + fileType +
                 ", children=" + children +
                 '}';
     }

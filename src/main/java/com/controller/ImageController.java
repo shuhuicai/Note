@@ -31,6 +31,13 @@ public class ImageController {
     @Resource(name = "com.service.FolderTreeService")
     private FolderTreeService folderTreeService;
 
+    /**
+     * 保存图片
+     *
+     * @param file     要保存的图片文件
+     * @param parentId 该图片属于哪个文件夹
+     * @return 返回该图片所在的目录信息
+     */
     @RequestMapping(value = "/saveImage", method = RequestMethod.POST)
     @ResponseBody
     public FolderTree saveImage(@RequestBody MultipartFile file, String parentId) {
@@ -55,6 +62,7 @@ public class ImageController {
             ft.setLabel(fileName);
             ft.setParentId(parentId);
             ft.setFileUrl(visitUrl);
+            ft.setFileType(0);//图片类型
 
             try {
                 fileUrlMappingService.addUrl(mapping);
