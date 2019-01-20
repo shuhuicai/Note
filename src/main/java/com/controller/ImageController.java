@@ -6,13 +6,17 @@ import com.service.FileUrlMappingService;
 import com.service.FolderTreeService;
 import com.service.ImageService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.util.Constant.localIP;
+import static com.util.RandomName.getName;
 
 /**
  * @author CAIYUHUI
@@ -50,7 +54,8 @@ public class ImageController {
             e.printStackTrace();
         }
         if (path != null) {//不为空表示保存成功，生成外界访问的URL
-            String visitUrl = localIP + "";
+            String visitUrl = localIP + getName(fileName);
+
 
             //将磁盘路径path和访问URL保存到数据库映射表
             FileUrlMapping mapping = new FileUrlMapping();
@@ -77,16 +82,18 @@ public class ImageController {
     /**
      * 显示图片
      *
-     * @param visitUrl 图片链接
-     * @param response 响应请求
+     * @param visitURL 图片给外界访问的链接
+     * @param response 响应
      */
-    @RequestMapping(value = "showImage/{visitUrl}", method = {RequestMethod.POST, RequestMethod.GET})
-    public void downloadImage(@PathVariable("visitUrl") String visitUrl, HttpServletResponse response) {
+    @RequestMapping(value = "/showImage", method = {RequestMethod.POST, RequestMethod.GET})
+    public void downloadImage(String visitURL, HttpServletResponse response) {
         //根据URL到映射表查询出文件存储的地址
-        String path = fileUrlMappingService.queryUrl(visitUrl);
+        String path = fileUrlMappingService.queryUrl(visitURL);
         //根据得到路径读取文件
         try {
-            imageService.getImage(path, response);
+            if (path != null) {
+                imageService.getImage(path, response);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

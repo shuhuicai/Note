@@ -3,34 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dao.FileUrlMappingMapper">
-    <!--<select id="findFolderByParentId" parameterType="String" resultMap="folderMap">
-        select * from t_folder_tree t where t.is_valid=1
-        <if test="parentId!=null">
-            and t.parent_id=#{parentId}
-        </if>
-    </select>
-
-    <update id="deleteFolderTreeById" parameterType="String">
-        update t_folder_tree t set t.modify_time=(select now()), t.is_valid=0 where t.Id in
-        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-    </update>
-
-    <resultMap id="folderMap" type="com.entity.FolderTree">
-        <result property="id" column="Id"/>
-        <result property="creator" column="creator"/>
-        <result property="createTime" column="create_time"/>
-        <result property="modifier" column="modifier"/>
-        <result property="modifyTime" column="modify_time"/>
-        <result property="isValid" column="is_valid"/>
-        <result property="remarks" column="remarks"/>
-        <result property="label" column="label"/>
-        <result property="parentId" column="parent_id"/>
-        <result property="isFolder" column="is_folder"/>
-        <result property="fileUrl" column="file_url"/>
-    </resultMap>-->
     <select id="findDiskUrlByVisitUrl" parameterType="String" resultType="String">
-        select t.disk_url from t_file_url_mapping t where t.is_valid=1 and t.visit_url={visitUrl}
+        select t.disk_url from t_file_url_mapping t where t.is_valid=1 and t.visit_url=#{visitUrl}
     </select>
 </mapper>

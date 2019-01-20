@@ -31,7 +31,7 @@ public class ImageService {
                 if ("GIF".equals(type.toUpperCase()) || "PNG".equals(type.toUpperCase()) || "JPG".equals(type.toUpperCase())) {
                     //文件保存的名字
                     String saveFileName = String.valueOf(System.currentTimeMillis()) + fileName;
-                    String path = filePath + "\\Images\\" + saveFileName;//文件保存的路径
+                    String path = filePath + "Images/" + saveFileName;//文件保存的路径
 
                     //转存文件到指定路径
                     file.transferTo(new File(path));
