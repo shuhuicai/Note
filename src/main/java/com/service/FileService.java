@@ -22,18 +22,14 @@ public class FileService {
      * @param fileType 文件类型
      * @return 成功时，返回文件保存在磁盘上的路径；失败时，返回null
      */
-    public String saveFile(MultipartFile file, String fileType) throws Exception {
+    public String saveFile(MultipartFile file, int fileType) throws Exception {
         if (file != null) {
             String fileName = file.getOriginalFilename();//文件上传过来的名字（包括后缀）
-            String folderName = "";//根据文件类型分类到指定文件夹
-            switch (fileType) {
-                case "image":
-                    folderName = "Image/";
-                    break;
-                case "pdf":
-                case "word":
-                    folderName = "Document/";
-                    break;
+            String folderName;//根据文件类型分类到指定文件夹
+            if (fileType == 0) {//图片
+                folderName = "Image/";
+            } else {//文档文件
+                folderName = "Document/";
             }
             //文件保存的名字
             String saveFileName = String.valueOf(System.currentTimeMillis()) + fileName;

@@ -46,7 +46,7 @@ public class FileController {
      */
     @RequestMapping(value = "/saveFile", method = RequestMethod.POST)
     @ResponseBody
-    public ResultBean<FolderTree> saveFile(@RequestBody MultipartFile file, String parentId, String fileType) {
+    public ResultBean<FolderTree> saveFile(@RequestBody MultipartFile file, String parentId, int fileType) {
         String fileName = file.getOriginalFilename();
         FolderTree ft = new FolderTree();
         ResultBean<FolderTree> res = new ResultBean<>();
@@ -70,18 +70,8 @@ public class FileController {
             ft.setLabel(fileName);
             ft.setParentId(parentId);
             ft.setFileUrl(visitUrl);
+            ft.setFileType(fileType);
 
-            switch (fileType) {
-                case "image":
-                    ft.setFileType(0);//图片类型
-                    break;
-                case "pdf":
-                    ft.setFileType(1);//pdf
-                    break;
-                case "word":
-                    ft.setFileType(2);//word
-                    break;
-            }
             try {
                 fileUrlMappingService.addUrl(mapping);
                 folderTreeService.createFolderOrFile(ft);
