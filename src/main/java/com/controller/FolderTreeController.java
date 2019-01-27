@@ -72,4 +72,21 @@ public class FolderTreeController {
         }
         return false;
     }
+
+    /**
+     * 文件重命名
+     *
+     * @param ft (label  id)
+     * @return true false
+     */
+    @RequestMapping(value = "/updateLabel", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean updateLabel(@RequestBody FolderTree ft) {
+        try {
+            return folderTreeService.updateLabel(ft.getId(), ft.getLabel());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

@@ -17,6 +17,10 @@
         </foreach>
     </update>
 
+    <update id="updateLabelById" parameterType="Map">
+        update t_folder_tree t set t.modify_time=(select now()),t.label=#{label} where t.Id=#{id}
+    </update>
+
     <resultMap id="folderMap" type="com.entity.FolderTree">
         <result property="id" column="Id"/>
         <result property="creator" column="creator"/>

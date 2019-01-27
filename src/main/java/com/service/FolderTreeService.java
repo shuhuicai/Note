@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * FolderTree业务逻辑
@@ -72,6 +74,20 @@ public class FolderTreeService {
     public boolean deleteFolderTree(FolderTree ft) throws Exception {
         String[] ids = getIds(ft);
         return folderTreeMapper.deleteFolderTreeById(ids) > 0;
+    }
+
+    /**
+     * 重命名文件
+     *
+     * @param id    要重命名的文件的id值
+     * @param label 更新后的名字
+     * @return 返回成功与否
+     */
+    public boolean updateLabel(String id, String label) throws Exception {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", id);
+        map.put("label", label);
+        return folderTreeMapper.updateLabelById(map) > 0;
     }
 
     /**

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * FolderTreeMapper
@@ -31,4 +32,12 @@ public interface FolderTreeMapper extends BaseMapper<FolderTree> {
      * @return 返回删除成功与否
      */
     int deleteFolderTreeById(String[] ids);
+
+    /**
+     * 根据id值更新指定的文件名称label
+     *
+     * @param map 参数id,label
+     * @return 返回成功与否
+     */
+    int updateLabelById(Map<String, String> map);
 }
