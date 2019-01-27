@@ -37,9 +37,9 @@ public class FileController {
     private FolderTreeService folderTreeService;
 
     /**
-     * 保存图片
+     * 保存文件
      *
-     * @param file     要保存的图片文件
+     * @param file     要保存的文件
      * @param parentId 该图片属于哪个文件夹
      * @param fileType 文件类型
      * @return 返回该图片所在的目录信息
@@ -71,6 +71,7 @@ public class FileController {
             ft.setParentId(parentId);
             ft.setFileUrl(visitUrl);
             ft.setFileType(fileType);
+            ft.setRemarks("0");//该字段暂时作为前端文件重命名的一个判断条件，值为0，不会变的
 
             try {
                 fileUrlMappingService.addUrl(mapping);
@@ -87,7 +88,7 @@ public class FileController {
     }
 
     /**
-     * 显示图片
+     * 显示
      *
      * @param visitURL 文件给外界访问的链接
      * @param response 响应

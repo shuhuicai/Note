@@ -45,6 +45,7 @@ public class FolderTreeController {
     @ResponseBody
     public FolderTree createFolder(@RequestBody FolderTree ft) {
         try {
+            ft.setRemarks("0");//该字段暂时作为前端文件重命名的一个判断条件，值为0，不会变的
             if (folderTreeService.createFolderOrFile(ft)) {
                 return ft;
             }
