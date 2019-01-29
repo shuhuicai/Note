@@ -25,6 +25,14 @@ public interface UserMapper extends BaseMapper<User> {
     List<User> findUser(Pagination page, UserVo userVo);
 
     /**
+     * 登录逻辑
+     *
+     * @param userVo 参数 用户名account  密码password
+     * @return 返回查询结果的数量
+     */
+    int judgeUserByAccount(UserVo userVo);
+
+    /**
      * 修改用户信息
      *
      * @param userVo 要修改的内容

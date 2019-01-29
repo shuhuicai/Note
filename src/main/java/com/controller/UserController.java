@@ -29,18 +29,19 @@ public class UserController {
      * @param userVo 登录账号及密码
      * @return true or false 登录成功与否
      */
-    @RequestMapping(value="/login",method= RequestMethod.POST)
+    @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
     @ResponseBody
-    public boolean login(UserVo userVo) {
+    public boolean doLogin(@RequestBody UserVo userVo) {
         return userService.login(userVo);
     }
 
     /**
      * 查询所有用户
+     *
      * @param userVo 查询条件
      * @return 返回查询结果
      */
-    @RequestMapping(value="/queryUser",method = RequestMethod.POST)
+    @RequestMapping(value = "/queryUser", method = RequestMethod.POST)
     @ResponseBody
     public UserBean queryUser(@RequestBody UserVo userVo) {
         return userService.findUser(userVo);
@@ -48,6 +49,7 @@ public class UserController {
 
     /**
      * 修改用户信息
+     *
      * @param userVo 修改用户账号，密码
      * @return 返回所有有效的用户
      */
@@ -65,13 +67,14 @@ public class UserController {
 
     /**
      * 通过id值删除指定用户
+     *
      * @param id 用户记录id
      * @return 返回所有有效的用户
      */
     @RequestMapping("/deleteUser")
     @ResponseBody
     public UserBean deleteUser(String id) {
-        String[] ids=new String[]{id};
+        String[] ids = new String[]{id};
         try {
             userService.deleteUser(ids);
         } catch (Exception e) {
@@ -83,6 +86,7 @@ public class UserController {
 
     /**
      * 添加新的用户（角色目前只为普通用户1）
+     *
      * @param user 用户信息
      * @return 返回所有有效的用户
      */

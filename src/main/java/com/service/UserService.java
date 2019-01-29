@@ -17,8 +17,10 @@ import javax.annotation.Resource;
 public class UserService {
     @Resource(name = "com.dao.UserMapper")
     private UserMapper userMapper;
+
     /**
      * 根据指定条件查询用户表
+     *
      * @param userVo 查询条件
      * @return 返回查询结果及记录分页的页数 对象UserBean
      */
@@ -37,8 +39,8 @@ public class UserService {
         }
         /*page.setOrderByField("create_time");*/
 
-        UserBean userBean=new UserBean();
-        userBean.setUsers(userMapper.findUser(page,userVo));
+        UserBean userBean = new UserBean();
+        userBean.setUsers(userMapper.findUser(page, userVo));
         userBean.setPages(page.getPages());
         userBean.setPageSize(page.getSize());
         userBean.setIndex(page.getCurrent());
@@ -54,16 +56,7 @@ public class UserService {
      * @return 返回用户是否存在
      */
     public boolean login(UserVo userVo) {
-        Page<User> page = new Page<>();
-        page.setSize(10);
-        page.setCurrent(1);
-        userMapper.findUser(page, userVo);
-        //查询结果数据的数目
-        if (page.getTotal()!=0) {
-            return true;
-        } else {
-            return false;
-        }
+        return userMapper.judgeUserByAccount(userVo) == 1;
     }
 
     /**

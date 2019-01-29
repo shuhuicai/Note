@@ -29,6 +29,10 @@
         order by create_time desc
     </select>
 
+    <select id="judgeUserByAccount" parameterType="com.vo.UserVo" resultType="int">
+        select count(*) from t_user t where t.account=#{account} and t.password=#{password} and t.is_valid=1
+    </select>
+
     <update id="updateUser" parameterType="com.vo.UserVo">
         update t_user t set t.modify_time=(select now()),
         <if test="account!=null">
