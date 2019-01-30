@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.entity.User;
 import com.vo.UserVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -43,8 +44,9 @@ public interface UserMapper extends BaseMapper<User> {
     /**
      * 逻辑删除指定id值的记录
      *
-     * @param ids 要删除的记录的id组成的数据
+     * @param ids      要删除的记录的id组成的数据
+     * @param modifier 修改人
      * @return 修改成功与否
      */
-    int deleteUserById(String[] ids);
+    int deleteUserById(@Param("ids") String[] ids, @Param("modifier") String modifier);
 }

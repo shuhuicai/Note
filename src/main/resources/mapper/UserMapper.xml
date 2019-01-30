@@ -34,7 +34,7 @@
     </select>
 
     <update id="updateUser" parameterType="com.vo.UserVo">
-        update t_user t set t.modify_time=(select now()),
+        update t_user t set t.modify_time=(select now()),t.modifier=#{modifier},
         <if test="account!=null">
             t.account=#{account},
         </if>
@@ -50,9 +50,9 @@
         where t.is_valid=1 and t.id=#{id}
     </update>
 
-    <update id="deleteUserById" parameterType="String">
-        update t_user t set t.is_valid=0,t.modify_time=(select now()) where t.id in
-        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+    <update id="deleteUserById">
+        update t_user t set t.is_valid=0,t.modify_time=(select now()),t.modifier=#{modifier} where t.id in
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
     </update>

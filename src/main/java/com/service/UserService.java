@@ -2,9 +2,11 @@ package com.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.bean.UserBean;
+import com.bean.UserInfoBean;
 import com.dao.UserMapper;
 import com.entity.User;
 import com.vo.UserVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,6 +19,8 @@ import javax.annotation.Resource;
 public class UserService {
     @Resource(name = "com.dao.UserMapper")
     private UserMapper userMapper;
+    @Autowired
+    private UserInfoBean userInfoBean;
 
     /**
      * 根据指定条件查询用户表
@@ -66,6 +70,8 @@ public class UserService {
      * @throws Exception 操作异常
      */
     public void addUser(User user) throws Exception {
+        user.setCreator(userInfoBean.getCurrentUser());
+        user.setModifier(userInfoBean.getCurrentUser());
         userMapper.insert(user);
     }
 
@@ -76,6 +82,7 @@ public class UserService {
      * @throws Exception 数据库操作异常
      */
     public void modifyUser(UserVo userVo) throws Exception {
+        userVo.setModifier(userInfoBean.getCurrentUser());
         userMapper.updateUser(userVo);
     }
 
@@ -86,6 +93,6 @@ public class UserService {
      * @throws Exception 　数据库操作异常
      */
     public void deleteUser(String[] ids) throws Exception {
-        userMapper.deleteUserById(ids);
+        userMapper.deleteUserById(ids, userInfoBean.getCurrentUser());
     }
 }

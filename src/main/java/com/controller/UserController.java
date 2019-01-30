@@ -92,7 +92,6 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        System.out.println("接收到的id值："+id);
         return userService.findUser(new UserVo());
     }
 
