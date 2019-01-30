@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.bean.UserBean;
+import com.bean.UserInfoBean;
 import com.entity.User;
 import com.service.UserService;
 import com.vo.UserVo;
@@ -24,6 +25,8 @@ public class UserController {
 
     @Resource(name = "com.service.UserService")
     private UserService userService;
+    @Resource(name = "userInfoBean")
+    private UserInfoBean userInfoBean;
 
     /**
      * 用户登录
@@ -38,6 +41,7 @@ public class UserController {
             HttpSession session = request.getSession();//将用户、密码保存到Session中
             session.setAttribute("username", userVo.getAccount());
             session.setAttribute("password", userVo.getPassword());
+            userInfoBean.setCurrentUser(userVo.getAccount());//将当前用户保存至UserInfoBean对象中
             return true;
         } else {
             return false;
@@ -65,7 +69,6 @@ public class UserController {
     @RequestMapping("/modifyUser")
     @ResponseBody
     public UserBean modifyUser(@RequestBody UserVo userVo) {
-//        System.out.println(userVo);
         try {
             userService.modifyUser(userVo);
         } catch (Exception e) {

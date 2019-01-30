@@ -5,7 +5,7 @@ import com.entity.User;
 import java.util.List;
 
 /**
- * 用户Bean
+ * 用户Bean 用于返回给客户端的数据
  * 保存查询结果及记录相应的页数
  *
  * @author CAIYUHUI
