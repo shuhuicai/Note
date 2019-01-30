@@ -21,9 +21,11 @@ public class CorsFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
         req.setCharacterEncoding("utf-8");
-        resp.setHeader("Access-Control-Allow-Origin", "*");
+//        resp.setHeader("Access-Control-Allow-Origin", "*");//Access-Control-Allow-Credentials的值设为true的话，该值不能为*
+        resp.setHeader("Access-Control-Allow-Origin", req.getHeader("Origin"));
         resp.setHeader("Access-Control-Allow-Methods", "*");
         resp.setHeader("Access-Control-Allow-Headers", "Content-Type,XFILENAME,XFILECATEGORY,XFILESIZE");
+        resp.setHeader("Access-Control-Allow-Credentials", "true");//是否支持cookies跨域（解决跨域Session丢失问题）
         resp.setCharacterEncoding("utf-8");
         chain.doFilter(request, response);
     }

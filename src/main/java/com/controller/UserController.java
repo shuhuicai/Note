@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author CAIYUHUI
@@ -31,8 +33,15 @@ public class UserController {
      */
     @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
     @ResponseBody
-    public boolean doLogin(@RequestBody UserVo userVo) {
-        return userService.login(userVo);
+    public boolean doLogin(@RequestBody UserVo userVo, HttpServletRequest request) {
+        if (userService.login(userVo)) {
+            HttpSession session = request.getSession();//将用户、密码保存到Session中
+            session.setAttribute("username", userVo.getAccount());
+            session.setAttribute("password", userVo.getPassword());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
