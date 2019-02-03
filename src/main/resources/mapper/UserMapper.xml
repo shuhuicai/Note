@@ -26,6 +26,10 @@
             and t.password=#{password}
         </if>
 
+        <if test="role!=null and role!=''">
+            and t.role=#{role}
+        </if>
+
         order by create_time desc
     </select>
 
