@@ -5,6 +5,7 @@ import com.bean.UserInfoBean;
 import com.entity.User;
 import com.service.UserService;
 import com.vo.UserVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,8 @@ public class UserController {
 
     @Resource(name = "com.service.UserService")
     private UserService userService;
-    @Resource(name = "userInfoBean")
+    //    @Resource(name = "userInfoBean")
+    @Autowired
     private UserInfoBean userInfoBean;
 
     /**
@@ -68,13 +70,17 @@ public class UserController {
      */
     @RequestMapping("/modifyUser")
     @ResponseBody
-    public UserBean modifyUser(@RequestBody UserVo userVo) {
+    public UserBean modifyUser(@RequestBody UserVo userVo, HttpServletRequest request) {
         try {
-            userService.modifyUser(userVo);
+            if (!userService.modifyUser(userVo, request)) {
+                return null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return userService.findUser(new UserVo());
+        UserVo u = new UserVo();
+        u.setId(userVo.getId());
+        return userService.findUser(u);
     }
 
     /**

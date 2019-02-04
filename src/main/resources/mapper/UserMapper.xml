@@ -38,19 +38,25 @@
     </select>
 
     <update id="updateUser" parameterType="com.vo.UserVo">
-        update t_user t set t.modify_time=(select now()),t.modifier=#{modifier},
-        <if test="account!=null">
-            t.account=#{account},
-        </if>
+        update t_user t
+        <set>
+            t.modify_time=(select now()),
+            <if test="modifier!=null and modifier!=''">
+                t.modifier=#{modifier},
+            </if>
 
-        <if test="password!=null">
-            t.password=#{password},
-        </if>
+            <if test="account!=null and account!=''">
+                t.account=#{account},
+            </if>
 
-        <if test="role!=null">
-            t.role=#{role}
-        </if>
+            <if test="password!=null and password!=''">
+                t.password=#{password},
+            </if>
 
+            <if test="role!=null and role!=''">
+                t.role=#{role}
+            </if>
+        </set>
         where t.is_valid=1 and t.id=#{id}
     </update>
 

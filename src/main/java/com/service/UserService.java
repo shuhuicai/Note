@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author CAIYUHUI
@@ -81,9 +83,11 @@ public class UserService {
      * @param userVo 修改内容
      * @throws Exception 数据库操作异常
      */
-    public void modifyUser(UserVo userVo) throws Exception {
-        userVo.setModifier(userInfoBean.getCurrentUser());
-        userMapper.updateUser(userVo);
+    public boolean modifyUser(UserVo userVo, HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
+//        userVo.setModifier(userInfoBean.getCurrentUser());
+        userVo.setModifier((String) session.getAttribute("username"));
+        return userMapper.updateUser(userVo) > 0;
     }
 
     /**
