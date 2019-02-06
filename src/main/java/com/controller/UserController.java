@@ -91,14 +91,14 @@ public class UserController {
      */
     @RequestMapping("/deleteUser")
     @ResponseBody
-    public UserBean deleteUser(String id) {
+    public boolean deleteUser(String id, HttpServletRequest request) {
         String[] ids = new String[]{id};
         try {
-            userService.deleteUser(ids);
+            return userService.deleteUser(ids, request);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return userService.findUser(new UserVo());
+        return false;
     }
 
     /**

@@ -94,7 +94,8 @@ public class UserService {
      * @param ids 要删除的记录的id值组成的数组
      * @throws Exception 　数据库操作异常
      */
-    public void deleteUser(String[] ids) throws Exception {
-//        userMapper.deleteUserById(ids, userInfoBean.getCurrentUser());
+    public boolean deleteUser(String[] ids, HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
+        return userMapper.deleteUserById(ids, (String) session.getAttribute("username")) > 0;
     }
 }
