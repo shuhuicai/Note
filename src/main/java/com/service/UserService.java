@@ -2,11 +2,9 @@ package com.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.bean.UserBean;
-import com.bean.UserInfoBean;
 import com.dao.UserMapper;
 import com.entity.User;
 import com.vo.UserVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,8 +19,6 @@ import javax.servlet.http.HttpSession;
 public class UserService {
     @Resource(name = "com.dao.UserMapper")
     private UserMapper userMapper;
-    @Autowired
-    private UserInfoBean userInfoBean;
 
     /**
      * 根据指定条件查询用户表
@@ -71,10 +67,12 @@ public class UserService {
      * @param user 新用户信息
      * @throws Exception 操作异常
      */
-    public void addUser(User user) throws Exception {
-        user.setCreator(userInfoBean.getCurrentUser());
-        user.setModifier(userInfoBean.getCurrentUser());
-        userMapper.insert(user);
+    public boolean addUser(User user, HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
+        String username = (String) session.getAttribute("username");
+        user.setCreator(username);
+        user.setModifier(username);
+        return userMapper.insert(user) > 0;
     }
 
     /**
@@ -97,6 +95,6 @@ public class UserService {
      * @throws Exception 　数据库操作异常
      */
     public void deleteUser(String[] ids) throws Exception {
-        userMapper.deleteUserById(ids, userInfoBean.getCurrentUser());
+//        userMapper.deleteUserById(ids, userInfoBean.getCurrentUser());
     }
 }

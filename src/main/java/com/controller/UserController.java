@@ -109,12 +109,12 @@ public class UserController {
      */
     @RequestMapping("/addUser")
     @ResponseBody
-    public UserBean addUser(@RequestBody User user) {
+    public boolean addUser(@RequestBody User user, HttpServletRequest request) {
         try {
-            userService.addUser(user);
+            return userService.addUser(user, request);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return userService.findUser(new UserVo());
+        return false;
     }
 }
