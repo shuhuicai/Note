@@ -1,7 +1,10 @@
 package com.service;
 
+import com.baomidou.mybatisplus.plugins.Page;
+import com.bean.DataBean;
 import com.dao.FolderTreeMapper;
 import com.entity.FolderTree;
+import com.vo.UserVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,7 +26,34 @@ public class FolderTreeService {
     private FolderTreeMapper folderTreeMapper;
 
     /**
-     * 初始化时，查询出整个目录结构
+     * 获取所有目录（无树结构的）
+     *
+     * @return 返回查询结果
+     */
+    public DataBean queryAllFolder(UserVo userVo) {
+        Page<FolderTree> page = new Page<>();
+        if (userVo.getPageSize() > 0) {
+            page.setSize(userVo.getPageSize());
+        } else {
+            page.setSize(5);
+        }
+
+        if (userVo.getPage() > 0) {
+            page.setCurrent(userVo.getPage());
+        } else {
+            page.setCurrent(1);
+        }
+        DataBean<FolderTree> dataBean = new DataBean<>();
+        dataBean.setLists(folderTreeMapper.findAllFolder(page));
+        dataBean.setIndex(page.getCurrent());
+        dataBean.setPages(page.getPages());
+        dataBean.setTotal(page.getTotal());
+        dataBean.setPageSize(page.getSize());
+        return dataBean;
+    }
+
+    /**
+     * 初始化时，查询出整个目录结构（有树结构的）
      *
      * @return 返回查询结果
      */

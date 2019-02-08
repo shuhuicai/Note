@@ -1,6 +1,7 @@
 package com.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.entity.FolderTree;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -18,7 +19,16 @@ import java.util.Map;
 public interface FolderTreeMapper extends BaseMapper<FolderTree> {
 
     /**
+     * 获取所有存在的文件、文件夹数据（无树结构）
+     *
+     * @param page 分页查询
+     * @return 返回查询结果
+     */
+    List<FolderTree> findAllFolder(Pagination page);
+
+    /**
      * 根据父目录id值查找出所有的子目录
+     * 有树结构的查询
      *
      * @param parentId 父目录id值
      * @return 返回所有子目录

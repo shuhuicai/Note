@@ -3,6 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dao.FolderTreeMapper">
+
+    <select id="findAllFolder" resultMap="folderMap">
+        select * from t_folder_tree t where t.is_valid=1
+    </select>
+
     <select id="findFolderByParentId" parameterType="String" resultMap="folderMap">
         select * from t_folder_tree t where t.is_valid=1
         <if test="parentId!=null">

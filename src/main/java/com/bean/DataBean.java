@@ -1,29 +1,27 @@
 package com.bean;
 
-import com.entity.User;
-
 import java.util.List;
 
 /**
- * 用户Bean 用于返回给客户端的数据
+ * 返回结果的Bean 用于返回给客户端的数据
  * 保存查询结果及记录相应的页数
  *
  * @author CAIYUHUI
  * @create 2018/12/11 22:33
  **/
-public class UserBean {
-    private List<User> users; //查询结果
+public class DataBean<T> {
+    private List<T> lists; //查询结果
     private long pages; //页数
     private long total;//总记录数
     private int pageSize;//一页有多少条记录
     private int index;//当前第几页
 
-    public List<User> getUsers() {
-        return users;
+    public List<T> getLists() {
+        return lists;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setLists(List<T> lists) {
+        this.lists = lists;
     }
 
     public long getPages() {

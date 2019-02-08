@@ -1,7 +1,9 @@
 package com.controller;
 
+import com.bean.DataBean;
 import com.entity.FolderTree;
 import com.service.FolderTreeService;
+import com.vo.UserVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +26,20 @@ public class FolderTreeController {
     private FolderTreeService folderTreeService;
 
     /**
+     * 查询所有的文件夹数据（无树结构）
+     *
+     * @param userVo 查询条件
+     * @return 返回查询结果
+     */
+    @RequestMapping(value = "/queryFolder", method = RequestMethod.POST)
+    @ResponseBody
+    public DataBean queryFolder(@RequestBody UserVo userVo) {
+        return folderTreeService.queryAllFolder(userVo);
+    }
+
+    /**
      * 初始化文件目录结构
-     * 获取所有的文件夹
+     * 获取所有的文件夹（有树结构）
      *
      * @return 返回查询结果
      */

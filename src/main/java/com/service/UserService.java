@@ -1,7 +1,7 @@
 package com.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.bean.UserBean;
+import com.bean.DataBean;
 import com.dao.UserMapper;
 import com.entity.User;
 import com.vo.UserVo;
@@ -26,7 +26,7 @@ public class UserService {
      * @param userVo 查询条件
      * @return 返回查询结果及记录分页的页数 对象UserBean
      */
-    public UserBean findUser(UserVo userVo) {
+    public DataBean findUser(UserVo userVo) {
         Page<User> page = new Page<>(); //分页
         if (userVo.getPageSize() > 0) {
             page.setSize(userVo.getPageSize());
@@ -41,8 +41,8 @@ public class UserService {
         }
         /*page.setOrderByField("create_time");*/
 
-        UserBean userBean = new UserBean();
-        userBean.setUsers(userMapper.findUser(page, userVo));
+        DataBean<User> userBean = new DataBean<>();
+        userBean.setLists(userMapper.findUser(page, userVo));
         userBean.setPages(page.getPages());
         userBean.setPageSize(page.getSize());
         userBean.setIndex(page.getCurrent());

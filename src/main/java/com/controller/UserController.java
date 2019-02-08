@@ -1,6 +1,6 @@
 package com.controller;
 
-import com.bean.UserBean;
+import com.bean.DataBean;
 import com.bean.UserInfoBean;
 import com.entity.User;
 import com.service.UserService;
@@ -58,7 +58,7 @@ public class UserController {
      */
     @RequestMapping(value = "/queryUser", method = RequestMethod.POST)
     @ResponseBody
-    public UserBean queryUser(@RequestBody UserVo userVo) {
+    public DataBean queryUser(@RequestBody UserVo userVo) {
         return userService.findUser(userVo);
     }
 
@@ -70,7 +70,7 @@ public class UserController {
      */
     @RequestMapping("/modifyUser")
     @ResponseBody
-    public UserBean modifyUser(@RequestBody UserVo userVo, HttpServletRequest request) {
+    public DataBean modifyUser(@RequestBody UserVo userVo, HttpServletRequest request) {
         try {
             if (!userService.modifyUser(userVo, request)) {
                 return null;
