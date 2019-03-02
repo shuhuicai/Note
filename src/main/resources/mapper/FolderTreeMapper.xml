@@ -5,7 +5,7 @@
 <mapper namespace="com.dao.FolderTreeMapper">
 
     <select id="findAllFolder" resultMap="folderMap">
-        select * from t_folder_tree t where t.is_valid=1
+        select * from t_folder_tree t where t.is_valid=1 order by create_time desc
     </select>
 
     <select id="findFolderByParentId" parameterType="String" resultMap="folderMap">

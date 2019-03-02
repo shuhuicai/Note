@@ -27,7 +27,7 @@ public class FileService {
             String fileName = file.getOriginalFilename();//文件上传过来的名字（包括后缀）
             String folderName;//根据文件类型分类到指定文件夹
             if (fileType == 0) {//图片
-                folderName = "Image/";
+                folderName = "Images/";
             } else {//文档文件
                 folderName = "Document/";
             }

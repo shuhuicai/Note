@@ -40,7 +40,7 @@ public class FileController {
      * 保存文件
      *
      * @param file     要保存的文件
-     * @param parentId 该图片属于哪个文件夹
+     * @param parentId 该文件属于哪个文件夹
      * @param fileType 文件类型
      * @return 返回该图片所在的目录信息
      */
