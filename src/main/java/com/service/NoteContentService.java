@@ -1,8 +1,8 @@
 package com.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.dao.NoteMapper;
-import com.entity.Note;
+import com.dao.NoteContentMapper;
+import com.entity.NoteContent;
 import com.vo.NoteVo;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +13,22 @@ import java.util.List;
  * @author CAIYUHUI
  * @create 2018/09/21 18:19
  **/
-@Service("com.service.NoteService")
-public class NoteService {
+@Service("com.service.NoteContentService")
+public class NoteContentService {
 
-    @Resource
-    private NoteMapper noteMapper;
+    @Resource(name = "com.dao.NoteContentMapper")
+    private NoteContentMapper noteContentMapper;
+
+    /**
+     * 新增笔记(插入笔记的内容)
+     *
+     * @param note 笔记内容实体类（笔记内容，目录id）
+     * @return 返回数据插入成功与否
+     * @throws Exception
+     */
+    public boolean addNoteContent(NoteContent note) throws Exception {
+        return noteContentMapper.insert(note) > 0;
+    }
 
     /**
      * 根据指定条件查询笔记内容
@@ -25,22 +36,12 @@ public class NoteService {
      * @param noteVo 查询条件
      * @return 返回查询结果
      */
-    public List<Note> findNote(NoteVo noteVo) {
-        Page<Note> page = new Page<>();
+    public List<NoteContent> findNote(NoteVo noteVo) {
+        Page<NoteContent> page = new Page<>();
         page.setCurrent(noteVo.getPage());
         page.setSize(noteVo.getPageSize());
 
-        return noteMapper.findNote(page, noteVo);
-    }
-
-    /**
-     * 新增笔记
-     *
-     * @param note 笔记内容
-     * @throws Exception 数据库操作异常
-     */
-    public void addNote(Note note) throws Exception {
-        noteMapper.insert(note);
+        return noteContentMapper.findNote(page, noteVo);
     }
 
     /**
@@ -50,7 +51,7 @@ public class NoteService {
      * @throws Exception 数据库操作异常
      */
     public void updateNote(NoteVo noteVo) throws Exception {
-        noteMapper.updateNote(noteVo);
+        noteContentMapper.updateNote(noteVo);
     }
 
     /**
@@ -60,6 +61,6 @@ public class NoteService {
      * @throws Exception 数据库操作异常
      */
     public void deleteNote(String[] id) throws Exception {
-        noteMapper.deleteNote(id);
+        noteContentMapper.deleteNote(id);
     }
 }

@@ -26,7 +26,6 @@ public class UserController {
 
     @Resource(name = "com.service.UserService")
     private UserService userService;
-    //    @Resource(name = "userInfoBean")
     @Autowired
     private UserInfoBean userInfoBean;
 

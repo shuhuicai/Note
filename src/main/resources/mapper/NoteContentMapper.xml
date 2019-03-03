@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dao.NoteMapper">
+<mapper namespace="com.dao.NoteContentMapper">
     <select id="findNote" parameterType="com.vo.NoteVo" resultMap="noteMap">
         select * from t_note t where t.is_valid=1
         <if test="id!=null">
@@ -27,7 +27,7 @@
         order by t.create_time
     </select>
 
-    <resultMap id="noteMap" type="com.entity.Note">
+    <resultMap id="noteMap" type="com.entity.NoteContent">
         <result property="id" column="id"/>
         <result property="creator" column="creator"/>
         <result property="createTime" column="create_time"/>

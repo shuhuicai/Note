@@ -2,7 +2,7 @@ package com.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
-import com.entity.Note;
+import com.entity.NoteContent;
 import com.vo.NoteVo;
 import org.springframework.stereotype.Repository;
 
@@ -12,8 +12,8 @@ import java.util.List;
  * @author CAIYUHUI
  * @create 2018/09/18 20:03
  **/
-@Repository("com.dao.NoteMapper")
-public interface NoteMapper extends BaseMapper<Note> {
+@Repository("com.dao.NoteContentMapper")
+public interface NoteContentMapper extends BaseMapper<NoteContent> {
 
     /**
      * 根据指定条件查询笔记内容
@@ -22,7 +22,7 @@ public interface NoteMapper extends BaseMapper<Note> {
      * @param noteVo 查询条件（可选）id,creator,createTime,noteContent,folderId
      * @return 返回查询结果
      */
-    List<Note> findNote(Pagination page, NoteVo noteVo);
+    List<NoteContent> findNote(Pagination page, NoteVo noteVo);
 
     /**
      * 修改笔记内容

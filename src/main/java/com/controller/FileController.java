@@ -3,9 +3,12 @@ package com.controller;
 import com.bean.ResultBean;
 import com.entity.FileUrlMapping;
 import com.entity.FolderTree;
+import com.entity.NoteContent;
+import com.service.FileService;
 import com.service.FileUrlMappingService;
 import com.service.FolderTreeService;
-import com.service.FileService;
+import com.service.NoteContentService;
+import com.vo.NoteParamVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +38,9 @@ public class FileController {
 
     @Resource(name = "com.service.FolderTreeService")
     private FolderTreeService folderTreeService;
+
+    @Resource(name = "com.service.NoteContentService")
+    private NoteContentService noteContentService;
 
     /**
      * 保存文件
@@ -88,7 +94,7 @@ public class FileController {
     }
 
     /**
-     * 显示
+     * 显示（文件类型）
      *
      * @param visitURL 文件给外界访问的链接
      * @param response 响应
@@ -105,5 +111,47 @@ public class FileController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @RequestMapping(value = "/showNote", method = {RequestMethod.POST})
+    public void showNote() {
+
+    }
+
+    /**
+     * 保存富文本笔记内容
+     * noteParamVo 参数
+     *
+     * @return 笔记目录结构信息
+     */
+    @RequestMapping(value = "/saveNote", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResultBean<FolderTree> saveNote(@RequestBody NoteParamVo noteParamVo) {
+        //先向目录结构表插入笔记名字
+        FolderTree ft = new FolderTree();
+        ft.setLabel(noteParamVo.getNoteName());
+        ft.setParentId(noteParamVo.getParentId());
+        ft.setIsFolder(0);
+        ft.setFileType(3);
+        ft.setRemarks("0");
+
+        ResultBean<FolderTree> res = new ResultBean<>();
+
+        try {
+            if (folderTreeService.createFolderOrFile(ft)) {
+                res.setData(ft);
+                res.setResult(1);
+
+                NoteContent noteContent = new NoteContent();
+                noteContent.setFileId(ft.getId());
+                noteContent.setNoteContent(noteParamVo.getContent());
+                noteContentService.addNoteContent(noteContent);
+            } else {
+                res.setResult(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 }
