@@ -3,6 +3,7 @@ package com.service;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.dao.NoteContentMapper;
 import com.entity.NoteContent;
+import com.vo.NoteParamVo;
 import com.vo.NoteVo;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,17 @@ public class NoteContentService {
     public boolean addNoteContent(NoteContent note) throws Exception {
         return noteContentMapper.insert(note) > 0;
     }
+
+    /**
+     * 查询笔记内容和名字
+     *
+     * @param id 笔记id值
+     * @return
+     */
+    public NoteParamVo queryNoteInfo(String id) {
+        return noteContentMapper.queryNoteInfo(id).get(0);
+    }
+
 
     /**
      * 根据指定条件查询笔记内容

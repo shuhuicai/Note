@@ -129,7 +129,7 @@ public class FileController {
     public ResultBean<FolderTree> saveNote(@RequestBody NoteParamVo noteParamVo) {
         //先向目录结构表插入笔记名字
         FolderTree ft = new FolderTree();
-        ft.setLabel(noteParamVo.getNoteName());
+        ft.setLabel(noteParamVo.getLabel());
         ft.setParentId(noteParamVo.getParentId());
         ft.setIsFolder(0);
         ft.setFileType(3);
@@ -145,6 +145,7 @@ public class FileController {
                 NoteContent noteContent = new NoteContent();
                 noteContent.setFileId(ft.getId());
                 noteContent.setNoteContent(noteParamVo.getContent());
+                //再将内容插入到笔记内容表
                 noteContentService.addNoteContent(noteContent);
             } else {
                 res.setResult(0);
@@ -153,5 +154,21 @@ public class FileController {
             e.printStackTrace();
         }
         return res;
+    }
+
+    /**
+     * 打开笔记，查询笔记的名字和内容
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/initNote", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public NoteParamVo initNote(String id) {
+        if (id != null && id.trim().length() != 0) {
+            return noteContentService.queryNoteInfo(id);
+        } else {
+            return new NoteParamVo();
+        }
     }
 }

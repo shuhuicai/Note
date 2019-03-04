@@ -3,6 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dao.NoteContentMapper">
+
+    <select id="queryNoteInfo" parameterType="String" resultMap="initMap">
+        select f.label,n.note_content from t_folder_tree f inner join t_note_content n on f.id=n.file_id and f.id=#{id}
+    </select>
+
+    <resultMap id="initMap" type="com.vo.NoteParamVo">
+        <result property="label" column="label"/>
+        <result property="content" column="note_content"/>
+    </resultMap>
+
     <select id="findNote" parameterType="com.vo.NoteVo" resultMap="noteMap">
         select * from t_note t where t.is_valid=1
         <if test="id!=null">

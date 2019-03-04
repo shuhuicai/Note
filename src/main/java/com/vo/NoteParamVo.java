@@ -9,7 +9,16 @@ package com.vo;
 public class NoteParamVo {
     private String parentId;
     private String content;
-    private String noteName;
+    private String label;//笔记名
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getParentId() {
         return parentId;
@@ -27,11 +36,11 @@ public class NoteParamVo {
         this.content = content;
     }
 
-    public String getNoteName() {
-        return noteName;
+    public String getLabel() {
+        return label;
     }
 
-    public void setNoteName(String noteName) {
-        this.noteName = noteName;
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

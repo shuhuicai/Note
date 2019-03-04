@@ -3,6 +3,7 @@ package com.dao;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.entity.NoteContent;
+import com.vo.NoteParamVo;
 import com.vo.NoteVo;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,15 @@ import java.util.List;
  **/
 @Repository("com.dao.NoteContentMapper")
 public interface NoteContentMapper extends BaseMapper<NoteContent> {
+
+    /**
+     * 连表查询笔记名和内容
+     *
+     * @param id 笔记id
+     * @return
+     */
+    List<NoteParamVo> queryNoteInfo(String id);
+
 
     /**
      * 根据指定条件查询笔记内容
