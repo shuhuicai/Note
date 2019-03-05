@@ -38,7 +38,12 @@ public class NoteContentService {
      * @return
      */
     public NoteParamVo queryNoteInfo(String id) {
-        return noteContentMapper.queryNoteInfo(id).get(0);
+        List<NoteParamVo> res = noteContentMapper.queryNoteInfo(id);
+        if (res.size() > 0) {
+            return res.get(0);
+        } else {
+            return new NoteParamVo();
+        }
     }
 
 
