@@ -171,4 +171,35 @@ public class FileController {
             return new NoteParamVo();
         }
     }
+
+    /**
+     * 删除笔记内容和名字
+     *
+     * @param noteParamVo id content label
+     * @return true or false
+     */
+    @RequestMapping(value = "/updateNote", method = {RequestMethod.POST})
+    @ResponseBody
+    public boolean updateNote(@RequestBody NoteParamVo noteParamVo) {
+
+        try {
+            boolean flag, flag1;
+            if (noteParamVo.getContent() != null && noteParamVo.getContent().length() > 0) {
+                flag = noteContentService.updateNote(noteParamVo);
+            } else {
+                flag = true;
+            }
+            if (noteParamVo.getLabel() != null && noteParamVo.getLabel().length() > 0) {
+                flag1 = folderTreeService.updateLabel(noteParamVo.getId(), noteParamVo.getLabel());
+            } else {
+                flag1 = true;
+            }
+            if (flag && flag1) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
