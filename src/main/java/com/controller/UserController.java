@@ -102,6 +102,7 @@ public class UserController {
 
     /**
      * 添加新的用户（角色目前只为普通用户1）
+     * 注册
      *
      * @param user 用户信息
      * @return 返回所有有效的用户
@@ -115,5 +116,17 @@ public class UserController {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * 发送验证码
+     *
+     * @param address 发送的目的邮箱地址
+     * @return 验证码
+     */
+    @RequestMapping("/sendVerifyCode")
+    @ResponseBody
+    public String sendVerifyCode(String address) {
+        return userService.sendVerifyCode(address);
     }
 }

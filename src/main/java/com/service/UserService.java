@@ -4,12 +4,18 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.bean.DataBean;
 import com.dao.UserMapper;
 import com.entity.User;
+import com.util.Constant;
 import com.vo.UserVo;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Random;
 
 /**
  * @author CAIYUHUI
@@ -68,11 +74,25 @@ public class UserService {
      * @throws Exception 操作异常
      */
     public boolean addUser(User user, HttpServletRequest request) throws Exception {
-        HttpSession session = request.getSession();
+        /*HttpSession session = request.getSession();
         String username = (String) session.getAttribute("username");
         user.setCreator(username);
-        user.setModifier(username);
-        return userMapper.insert(user) > 0;
+        user.setModifier(username);*/
+        if (isAccountRegister(user.getAccount())) {
+            return false;
+        } else {
+            return userMapper.insert(user) > 0;
+        }
+    }
+
+    /**
+     * 判断账号是否注册过
+     *
+     * @param account 账号
+     * @return true 注册过,false 未注册
+     */
+    private boolean isAccountRegister(String account) {
+        return userMapper.isUserExist(account) > 0;
     }
 
     /**
@@ -97,5 +117,37 @@ public class UserService {
     public boolean deleteUser(String[] ids, HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
         return userMapper.deleteUserById(ids, (String) session.getAttribute("username")) > 0;
+    }
+
+    /**
+     * 发送验证码到指定邮箱
+     *
+     * @param address 目的邮箱地址
+     * @return 验证码
+     */
+    public String sendVerifyCode(String address) {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost(Constant.host);
+        mailSender.setUsername(Constant.email);
+        mailSender.setPassword(Constant.password);
+
+        Random random = new Random();
+        StringBuffer verifyCode = new StringBuffer();
+        for (int i = 0; i < 4; i++) {
+            verifyCode.append(random.nextInt(9) + "");
+        }
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
+            helper.setTo(address);
+            helper.setFrom(Constant.email);
+            helper.setSubject("注册验证码");//主题
+            helper.setText("【在线笔记本】您的验证码:" + verifyCode + ",请于5分钟内正确输入,如非本人操作,请忽略此邮件");
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return verifyCode.toString();
     }
 }

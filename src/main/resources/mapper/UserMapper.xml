@@ -37,6 +37,10 @@
         select count(*) from t_user t where t.account=#{account} and t.password=#{password} and t.is_valid=1
     </select>
 
+    <select id="isUserExist" parameterType="String" resultType="int">
+        select count(*) from t_user t where t.account=#{account} and t.is_valid=1
+    </select>
+
     <update id="updateUser" parameterType="com.vo.UserVo">
         update t_user t
         <set>

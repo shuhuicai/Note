@@ -26,6 +26,14 @@ public interface UserMapper extends BaseMapper<User> {
     List<User> findUser(Pagination page, UserVo userVo);
 
     /**
+     * 查询用户账户是否已经注册过
+     *
+     * @param account 账号
+     * @return >0表示已经注册过,=0表示未注册
+     */
+    int isUserExist(String account);
+
+    /**
      * 登录逻辑
      *
      * @param userVo 参数 用户名account  密码password
