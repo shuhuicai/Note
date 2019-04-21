@@ -75,7 +75,7 @@ public class UserService {
      */
     public boolean addUser(User user, HttpServletRequest request) throws Exception {
         /*HttpSession session = request.getSession();
-        String username = (String) session.getAttribute("username");
+        String username = (String) session.getAttribute("account");
         user.setCreator(username);
         user.setModifier(username);*/
         if (isAccountRegister(user.getAccount())) {
@@ -104,7 +104,7 @@ public class UserService {
     public boolean modifyUser(UserVo userVo, HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
 //        userVo.setModifier(userInfoBean.getCurrentUser());
-        userVo.setModifier((String) session.getAttribute("username"));
+        userVo.setModifier((String) session.getAttribute("account"));
         return userMapper.updateUser(userVo) > 0;
     }
 
@@ -116,7 +116,7 @@ public class UserService {
      */
     public boolean deleteUser(String[] ids, HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
-        return userMapper.deleteUserById(ids, (String) session.getAttribute("username")) > 0;
+        return userMapper.deleteUserById(ids, (String) session.getAttribute("account")) > 0;
     }
 
     /**

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -45,8 +46,8 @@ public class FolderTreeController {
      */
     @RequestMapping(value = "/initFolder", method = RequestMethod.POST)
     @ResponseBody
-    public List<FolderTree> initFolder() {
-        return folderTreeService.getAllFolder();
+    public List<FolderTree> initFolder(HttpServletRequest request) {
+        return folderTreeService.getAllFolder(request);
     }
 
     /**

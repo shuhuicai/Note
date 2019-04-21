@@ -8,6 +8,7 @@ import com.vo.UserVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,10 +58,13 @@ public class FolderTreeService {
      *
      * @return 返回查询结果
      */
-    public List<FolderTree> getAllFolder() {
+    public List<FolderTree> getAllFolder(HttpServletRequest request) {
+        String account = (String) request.getSession().getAttribute("account");
+        if (account == null) {
+            account = "#";
+        }
         //先查找所有根目录(id值为0)
-        List<FolderTree> res = queryFolder("0");
-        return res;
+        return queryFolder("0", account);
     }
 
     /**
@@ -69,12 +73,12 @@ public class FolderTreeService {
      * @param id 所有根目录的id值
      * @return 返回查询结果
      */
-    private List<FolderTree> queryFolder(String id) {
-        List<FolderTree> res = folderTreeMapper.findFolderByParentId(id);
+    private List<FolderTree> queryFolder(String id, String account) {
+        List<FolderTree> res = folderTreeMapper.findFolderByParentId(id, account);
         if (res != null) {//存在目录
             for (FolderTree ft : res) {
                 if (ft.getIsFolder() == 1) {//如果为文件夹，则继续递归查询子子孙孙目录
-                    List<FolderTree> childrenList = queryFolder(ft.getId());
+                    List<FolderTree> childrenList = queryFolder(ft.getId(), account);
                     if (childrenList != null) {
                         ft.setChildren(childrenList);
                     }

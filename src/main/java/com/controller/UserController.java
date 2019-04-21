@@ -40,7 +40,7 @@ public class UserController {
     public boolean doLogin(@RequestBody UserVo userVo, HttpServletRequest request) {
         if (userService.login(userVo)) {
             HttpSession session = request.getSession();//将用户、密码保存到Session中
-            session.setAttribute("username", userVo.getAccount());
+            session.setAttribute("account", userVo.getAccount());
             session.setAttribute("password", userVo.getPassword());
             userInfoBean.setCurrentUser(userVo.getAccount());//将当前用户保存至UserInfoBean对象中
             return true;

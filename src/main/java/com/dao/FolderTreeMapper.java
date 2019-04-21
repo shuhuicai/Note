@@ -33,7 +33,7 @@ public interface FolderTreeMapper extends BaseMapper<FolderTree> {
      * @param parentId 父目录id值
      * @return 返回所有子目录
      */
-    List<FolderTree> findFolderByParentId(@Param(value = "parentId") String parentId);
+    List<FolderTree> findFolderByParentId(@Param(value = "parentId") String parentId, @Param(value = "creator") String creator);
 
     /**
      * 逻辑删除指定id的目录

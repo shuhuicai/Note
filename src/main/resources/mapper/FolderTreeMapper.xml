@@ -13,6 +13,9 @@
         <if test="parentId!=null">
             and t.parent_id=#{parentId}
         </if>
+        <if test="creator!=null">
+            and t.creator=#{creator}
+        </if>
     </select>
 
     <update id="deleteFolderTreeById" parameterType="String">
