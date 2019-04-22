@@ -2,13 +2,14 @@ package com.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.bean.DataBean;
+import com.bean.UserInfoBean;
 import com.dao.FolderTreeMapper;
 import com.entity.FolderTree;
 import com.vo.UserVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,9 @@ public class FolderTreeService {
 
     @Resource(name = "com.dao.FolderTreeMapper")
     private FolderTreeMapper folderTreeMapper;
+
+    @Autowired
+    private UserInfoBean userInfoBean;
 
     /**
      * 获取所有目录（无树结构的）
@@ -58,8 +62,8 @@ public class FolderTreeService {
      *
      * @return 返回查询结果
      */
-    public List<FolderTree> getAllFolder(HttpServletRequest request) {
-        String account = (String) request.getSession().getAttribute("account");
+    public List<FolderTree> getAllFolder() {
+        String account = userInfoBean.getCurrentUser();
         if (account == null) {
             account = "#";
         }
@@ -95,6 +99,8 @@ public class FolderTreeService {
      * @return 返回创建成功与否
      */
     public boolean createFolderOrFile(FolderTree ft) throws Exception {
+        ft.setCreator(userInfoBean.getCurrentUser());
+        ft.setModifier(userInfoBean.getCurrentUser());
         return folderTreeMapper.insert(ft) > 0;
     }
 
@@ -107,7 +113,7 @@ public class FolderTreeService {
      */
     public boolean deleteFolderTree(FolderTree ft) throws Exception {
         String[] ids = getIds(ft);
-        return folderTreeMapper.deleteFolderTreeById(ids) > 0;
+        return folderTreeMapper.deleteFolderTreeById(ids, userInfoBean.getCurrentUser()) > 0;
     }
 
     /**
@@ -121,6 +127,7 @@ public class FolderTreeService {
         Map<String, String> map = new HashMap<>();
         map.put("id", id);
         map.put("label", label);
+        map.put("modifier", userInfoBean.getCurrentUser());
         return folderTreeMapper.updateLabelById(map) > 0;
     }
 
@@ -132,7 +139,6 @@ public class FolderTreeService {
      */
     private String[] getIds(FolderTree ft) {
         List<String> ids = new ArrayList<>();
-        FolderTree tmp;
         ids.add(ft.getId());
         if (ft.getChildren() != null) {
             getIdFromChildren(ids, ft.getChildren());

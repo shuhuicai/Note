@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author CAIYUHUI
@@ -39,9 +38,6 @@ public class UserController {
     @ResponseBody
     public boolean doLogin(@RequestBody UserVo userVo, HttpServletRequest request) {
         if (userService.login(userVo)) {
-            HttpSession session = request.getSession();//将用户、密码保存到Session中
-            session.setAttribute("account", userVo.getAccount());
-            session.setAttribute("password", userVo.getPassword());
             userInfoBean.setCurrentUser(userVo.getAccount());//将当前用户保存至UserInfoBean对象中
             return true;
         } else {
@@ -69,9 +65,9 @@ public class UserController {
      */
     @RequestMapping("/modifyUser")
     @ResponseBody
-    public DataBean modifyUser(@RequestBody UserVo userVo, HttpServletRequest request) {
+    public DataBean modifyUser(@RequestBody UserVo userVo) {
         try {
-            if (!userService.modifyUser(userVo, request)) {
+            if (!userService.modifyUser(userVo)) {
                 return null;
             }
         } catch (Exception e) {
@@ -90,10 +86,10 @@ public class UserController {
      */
     @RequestMapping("/deleteUser")
     @ResponseBody
-    public boolean deleteUser(String id, HttpServletRequest request) {
+    public boolean deleteUser(String id) {
         String[] ids = new String[]{id};
         try {
-            return userService.deleteUser(ids, request);
+            return userService.deleteUser(ids);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -109,9 +105,9 @@ public class UserController {
      */
     @RequestMapping("/addUser")
     @ResponseBody
-    public boolean addUser(@RequestBody User user, HttpServletRequest request) {
+    public boolean addUser(@RequestBody User user) {
         try {
-            return userService.addUser(user, request);
+            return userService.addUser(user);
         } catch (Exception e) {
             e.printStackTrace();
         }

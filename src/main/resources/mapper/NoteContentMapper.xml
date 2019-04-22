@@ -14,6 +14,6 @@
     </resultMap>
 
     <update id="updateNote" parameterType="Map">
-        update t_note_content t set t.modify_time=(select now()), t.note_content=#{content} where t.file_id=#{id}
+        update t_note_content t set t.modify_time=(select now()), t.note_content=#{content},t.modifier=#{modifier} where t.file_id=#{id}
     </update>
 </mapper>

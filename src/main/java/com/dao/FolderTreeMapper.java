@@ -41,7 +41,7 @@ public interface FolderTreeMapper extends BaseMapper<FolderTree> {
      * @param ids 要删除的目录id值
      * @return 返回删除成功与否
      */
-    int deleteFolderTreeById(String[] ids);
+    int deleteFolderTreeById(@Param("ids") String[] ids, @Param("modifier") String modifier);
 
     /**
      * 根据id值更新指定的文件名称label

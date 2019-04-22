@@ -19,14 +19,14 @@
     </select>
 
     <update id="deleteFolderTreeById" parameterType="String">
-        update t_folder_tree t set t.modify_time=(select now()), t.is_valid=0 where t.Id in
-        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+        update t_folder_tree t set t.modify_time=(select now()), t.is_valid=0,t.modifier=#{modifier} where t.Id in
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
     </update>
 
     <update id="updateLabelById" parameterType="Map">
-        update t_folder_tree t set t.modify_time=(select now()),t.label=#{label} where t.Id=#{id}
+        update t_folder_tree t set t.modify_time=(select now()),t.label=#{label},t.modifier=#{modifier} where t.Id=#{id}
     </update>
 
     <resultMap id="folderMap" type="com.entity.FolderTree">

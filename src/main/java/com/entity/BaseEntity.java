@@ -23,9 +23,9 @@ public class BaseEntity {
 
     public BaseEntity() {
         id = RandomId.randGenerate();
-        creator = "admin";
+        creator = "#";
+        modifier = "#";
         createTime = new Date();
-        modifier = "admin";
         modifyTime = new Date();
         isValid = 1;
     }

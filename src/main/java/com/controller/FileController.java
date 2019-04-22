@@ -113,11 +113,6 @@ public class FileController {
         }
     }
 
-    @RequestMapping(value = "/showNote", method = {RequestMethod.POST})
-    public void showNote() {
-
-    }
-
     /**
      * 保存富文本笔记内容
      * noteParamVo 参数

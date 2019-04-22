@@ -2,10 +2,12 @@ package com.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.bean.DataBean;
+import com.bean.UserInfoBean;
 import com.dao.UserMapper;
 import com.entity.User;
 import com.util.Constant;
 import com.vo.UserVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -13,8 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Random;
 
 /**
@@ -25,6 +25,9 @@ import java.util.Random;
 public class UserService {
     @Resource(name = "com.dao.UserMapper")
     private UserMapper userMapper;
+
+    @Autowired
+    private UserInfoBean userInfoBean;
 
     /**
      * 根据指定条件查询用户表
@@ -73,11 +76,12 @@ public class UserService {
      * @param user 新用户信息
      * @throws Exception 操作异常
      */
-    public boolean addUser(User user, HttpServletRequest request) throws Exception {
-        /*HttpSession session = request.getSession();
-        String username = (String) session.getAttribute("account");
-        user.setCreator(username);
-        user.setModifier(username);*/
+    public boolean addUser(User user) throws Exception {
+        String username = userInfoBean.getCurrentUser();
+        if (username != null) {
+            user.setCreator(username);
+            user.setModifier(username);
+        }
         if (isAccountRegister(user.getAccount())) {
             return false;
         } else {
@@ -101,10 +105,8 @@ public class UserService {
      * @param userVo 修改内容
      * @throws Exception 数据库操作异常
      */
-    public boolean modifyUser(UserVo userVo, HttpServletRequest request) throws Exception {
-        HttpSession session = request.getSession();
-//        userVo.setModifier(userInfoBean.getCurrentUser());
-        userVo.setModifier((String) session.getAttribute("account"));
+    public boolean modifyUser(UserVo userVo) throws Exception {
+        userVo.setModifier(userInfoBean.getCurrentUser());
         return userMapper.updateUser(userVo) > 0;
     }
 
@@ -114,9 +116,8 @@ public class UserService {
      * @param ids 要删除的记录的id值组成的数组
      * @throws Exception 　数据库操作异常
      */
-    public boolean deleteUser(String[] ids, HttpServletRequest request) throws Exception {
-        HttpSession session = request.getSession();
-        return userMapper.deleteUserById(ids, (String) session.getAttribute("account")) > 0;
+    public boolean deleteUser(String[] ids) throws Exception {
+        return userMapper.deleteUserById(ids, userInfoBean.getCurrentUser()) > 0;
     }
 
     /**

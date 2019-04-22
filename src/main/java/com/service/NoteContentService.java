@@ -1,8 +1,10 @@
 package com.service;
 
+import com.bean.UserInfoBean;
 import com.dao.NoteContentMapper;
 import com.entity.NoteContent;
 import com.vo.NoteParamVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,6 +22,9 @@ public class NoteContentService {
     @Resource(name = "com.dao.NoteContentMapper")
     private NoteContentMapper noteContentMapper;
 
+    @Autowired
+    private UserInfoBean userInfoBean;
+
     /**
      * 新增笔记(插入笔记的内容)
      *
@@ -28,6 +33,8 @@ public class NoteContentService {
      * @throws Exception
      */
     public boolean addNoteContent(NoteContent note) throws Exception {
+        note.setCreator(userInfoBean.getCurrentUser());
+        note.setModifier(userInfoBean.getCurrentUser());
         return noteContentMapper.insert(note) > 0;
     }
 
@@ -56,6 +63,7 @@ public class NoteContentService {
         Map<String, String> map = new HashMap<>();
         map.put("content", noteParamVo.getContent());
         map.put("id", noteParamVo.getId());
+        map.put("modifier", userInfoBean.getCurrentUser());
         return noteContentMapper.updateNote(map) > 0;
     }
 }

@@ -1,7 +1,9 @@
 package com.service;
 
+import com.bean.UserInfoBean;
 import com.dao.FileUrlMappingMapper;
 import com.entity.FileUrlMapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,6 +19,9 @@ public class FileUrlMappingService {
 
     @Resource(name = "com.dao.FileUrlMappingMapper")
     private FileUrlMappingMapper mappingMapper;
+
+    @Autowired
+    private UserInfoBean userInfoBean;
 
     /**
      * 根据url查询出文件存储的路径
@@ -35,6 +40,8 @@ public class FileUrlMappingService {
      * @return 返回添加成功与否
      */
     public boolean addUrl(FileUrlMapping mapping) throws Exception {
+        mapping.setCreator(userInfoBean.getCurrentUser());
+        mapping.setModifier(userInfoBean.getCurrentUser());
         return mappingMapper.insert(mapping) > 0;
     }
 }
