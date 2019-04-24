@@ -2,14 +2,14 @@ package com.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.bean.DataBean;
-import com.bean.UserInfoBean;
 import com.dao.FolderTreeMapper;
 import com.entity.FolderTree;
+import com.util.SessionUtil;
 import com.vo.UserVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,9 +26,6 @@ public class FolderTreeService {
 
     @Resource(name = "com.dao.FolderTreeMapper")
     private FolderTreeMapper folderTreeMapper;
-
-    @Autowired
-    private UserInfoBean userInfoBean;
 
     /**
      * 获取所有目录（无树结构的）
@@ -62,8 +59,8 @@ public class FolderTreeService {
      *
      * @return 返回查询结果
      */
-    public List<FolderTree> getAllFolder() {
-        String account = userInfoBean.getCurrentUser();
+    public List<FolderTree> getAllFolder(HttpServletRequest request) {
+        String account = SessionUtil.getCurrentUser(request);
         if (account == null) {
             account = "#";
         }
@@ -98,9 +95,13 @@ public class FolderTreeService {
      * @param ft 文件夹或文件参数
      * @return 返回创建成功与否
      */
-    public boolean createFolderOrFile(FolderTree ft) throws Exception {
-        ft.setCreator(userInfoBean.getCurrentUser());
-        ft.setModifier(userInfoBean.getCurrentUser());
+    public boolean createFolderOrFile(FolderTree ft, HttpServletRequest request) throws Exception {
+        String username = SessionUtil.getCurrentUser(request);
+        if (username == null) {
+            username = "#";
+        }
+        ft.setCreator(username);
+        ft.setModifier(username);
         return folderTreeMapper.insert(ft) > 0;
     }
 
@@ -111,9 +112,9 @@ public class FolderTreeService {
      * @return 返回删除成功与否布尔值
      * @throws Exception 异常
      */
-    public boolean deleteFolderTree(FolderTree ft) throws Exception {
+    public boolean deleteFolderTree(FolderTree ft, HttpServletRequest request) throws Exception {
         String[] ids = getIds(ft);
-        return folderTreeMapper.deleteFolderTreeById(ids, userInfoBean.getCurrentUser()) > 0;
+        return folderTreeMapper.deleteFolderTreeById(ids, SessionUtil.getCurrentUser(request)) > 0;
     }
 
     /**
@@ -123,11 +124,11 @@ public class FolderTreeService {
      * @param label 更新后的名字
      * @return 返回成功与否
      */
-    public boolean updateLabel(String id, String label) throws Exception {
+    public boolean updateLabel(String id, String label, HttpServletRequest request) throws Exception {
         Map<String, String> map = new HashMap<>();
         map.put("id", id);
         map.put("label", label);
-        map.put("modifier", userInfoBean.getCurrentUser());
+        map.put("modifier", SessionUtil.getCurrentUser(request));
         return folderTreeMapper.updateLabelById(map) > 0;
     }
 

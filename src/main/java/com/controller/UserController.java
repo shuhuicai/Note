@@ -1,11 +1,10 @@
 package com.controller;
 
 import com.bean.DataBean;
-import com.bean.UserInfoBean;
 import com.entity.User;
 import com.service.UserService;
+import com.util.SessionUtil;
 import com.vo.UserVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +24,6 @@ public class UserController {
 
     @Resource(name = "com.service.UserService")
     private UserService userService;
-    @Autowired
-    private UserInfoBean userInfoBean;
 
     /**
      * 用户登录
@@ -38,7 +35,8 @@ public class UserController {
     @ResponseBody
     public boolean doLogin(@RequestBody UserVo userVo, HttpServletRequest request) {
         if (userService.login(userVo)) {
-            userInfoBean.setCurrentUser(userVo.getAccount());//将当前用户保存至UserInfoBean对象中
+            //将当前用户保存至UserInfoBean对象中
+            SessionUtil.getSession(request).setAttribute("username", userVo.getAccount());
             return true;
         } else {
             return false;
@@ -65,9 +63,9 @@ public class UserController {
      */
     @RequestMapping("/modifyUser")
     @ResponseBody
-    public DataBean modifyUser(@RequestBody UserVo userVo) {
+    public DataBean modifyUser(@RequestBody UserVo userVo, HttpServletRequest request) {
         try {
-            if (!userService.modifyUser(userVo)) {
+            if (!userService.modifyUser(userVo, request)) {
                 return null;
             }
         } catch (Exception e) {
@@ -86,10 +84,10 @@ public class UserController {
      */
     @RequestMapping("/deleteUser")
     @ResponseBody
-    public boolean deleteUser(String id) {
+    public boolean deleteUser(String id, HttpServletRequest request) {
         String[] ids = new String[]{id};
         try {
-            return userService.deleteUser(ids);
+            return userService.deleteUser(ids, request);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -105,9 +103,9 @@ public class UserController {
      */
     @RequestMapping("/addUser")
     @ResponseBody
-    public boolean addUser(@RequestBody User user) {
+    public boolean addUser(@RequestBody User user, HttpServletRequest request) {
         try {
-            return userService.addUser(user);
+            return userService.addUser(user, request);
         } catch (Exception e) {
             e.printStackTrace();
         }

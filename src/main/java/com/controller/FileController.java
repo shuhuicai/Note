@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.util.Constant.localIP;
@@ -52,7 +53,7 @@ public class FileController {
      */
     @RequestMapping(value = "/saveFile", method = RequestMethod.POST)
     @ResponseBody
-    public ResultBean<FolderTree> saveFile(@RequestBody MultipartFile file, String parentId, int fileType) {
+    public ResultBean<FolderTree> saveFile(@RequestBody MultipartFile file, String parentId, int fileType, HttpServletRequest request) {
         String fileName = file.getOriginalFilename();
         FolderTree ft = new FolderTree();
         ResultBean<FolderTree> res = new ResultBean<>();
@@ -80,8 +81,8 @@ public class FileController {
             ft.setRemarks("0");//该字段暂时作为前端文件重命名的一个判断条件，值为0，不会变的
 
             try {
-                fileUrlMappingService.addUrl(mapping);
-                folderTreeService.createFolderOrFile(ft);
+                fileUrlMappingService.addUrl(mapping, request);
+                folderTreeService.createFolderOrFile(ft, request);
                 res.setResult(1);//成功
                 res.setData(ft);
                 return res;
@@ -121,7 +122,7 @@ public class FileController {
      */
     @RequestMapping(value = "/saveNote", method = {RequestMethod.POST})
     @ResponseBody
-    public ResultBean<FolderTree> saveNote(@RequestBody NoteParamVo noteParamVo) {
+    public ResultBean<FolderTree> saveNote(@RequestBody NoteParamVo noteParamVo, HttpServletRequest request) {
         //先向目录结构表插入笔记名字
         FolderTree ft = new FolderTree();
         ft.setLabel(noteParamVo.getLabel());
@@ -133,7 +134,7 @@ public class FileController {
         ResultBean<FolderTree> res = new ResultBean<>();
 
         try {
-            if (folderTreeService.createFolderOrFile(ft)) {
+            if (folderTreeService.createFolderOrFile(ft, request)) {
                 res.setData(ft);
                 res.setResult(1);
 
@@ -141,7 +142,7 @@ public class FileController {
                 noteContent.setFileId(ft.getId());
                 noteContent.setNoteContent(noteParamVo.getContent());
                 //再将内容插入到笔记内容表
-                noteContentService.addNoteContent(noteContent);
+                noteContentService.addNoteContent(noteContent, request);
             } else {
                 res.setResult(0);
             }
@@ -175,17 +176,17 @@ public class FileController {
      */
     @RequestMapping(value = "/updateNote", method = {RequestMethod.POST})
     @ResponseBody
-    public boolean updateNote(@RequestBody NoteParamVo noteParamVo) {
+    public boolean updateNote(@RequestBody NoteParamVo noteParamVo, HttpServletRequest request) {
 
         try {
             boolean flag, flag1;
             if (noteParamVo.getContent() != null && noteParamVo.getContent().length() > 0) {
-                flag = noteContentService.updateNote(noteParamVo);
+                flag = noteContentService.updateNote(noteParamVo, request);
             } else {
                 flag = true;
             }
             if (noteParamVo.getLabel() != null && noteParamVo.getLabel().length() > 0) {
-                flag1 = folderTreeService.updateLabel(noteParamVo.getId(), noteParamVo.getLabel());
+                flag1 = folderTreeService.updateLabel(noteParamVo.getId(), noteParamVo.getLabel(), request);
             } else {
                 flag1 = true;
             }

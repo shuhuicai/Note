@@ -1,13 +1,13 @@
 package com.service;
 
-import com.bean.UserInfoBean;
 import com.dao.NoteContentMapper;
 import com.entity.NoteContent;
+import com.util.SessionUtil;
 import com.vo.NoteParamVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,9 +22,6 @@ public class NoteContentService {
     @Resource(name = "com.dao.NoteContentMapper")
     private NoteContentMapper noteContentMapper;
 
-    @Autowired
-    private UserInfoBean userInfoBean;
-
     /**
      * 新增笔记(插入笔记的内容)
      *
@@ -32,9 +29,9 @@ public class NoteContentService {
      * @return 返回数据插入成功与否
      * @throws Exception
      */
-    public boolean addNoteContent(NoteContent note) throws Exception {
-        note.setCreator(userInfoBean.getCurrentUser());
-        note.setModifier(userInfoBean.getCurrentUser());
+    public boolean addNoteContent(NoteContent note, HttpServletRequest request) throws Exception {
+        note.setModifier(SessionUtil.getCurrentUser(request));
+        note.setCreator(SessionUtil.getCurrentUser(request));
         return noteContentMapper.insert(note) > 0;
     }
 
@@ -59,11 +56,11 @@ public class NoteContentService {
      * @param noteParamVo content id
      * @return true or false
      */
-    public boolean updateNote(NoteParamVo noteParamVo) throws Exception {
+    public boolean updateNote(NoteParamVo noteParamVo, HttpServletRequest request) throws Exception {
         Map<String, String> map = new HashMap<>();
         map.put("content", noteParamVo.getContent());
         map.put("id", noteParamVo.getId());
-        map.put("modifier", userInfoBean.getCurrentUser());
+        map.put("modifier", SessionUtil.getCurrentUser(request));
         return noteContentMapper.updateNote(map) > 0;
     }
 }

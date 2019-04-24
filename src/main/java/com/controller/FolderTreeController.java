@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -45,8 +46,8 @@ public class FolderTreeController {
      */
     @RequestMapping(value = "/initFolder", method = RequestMethod.POST)
     @ResponseBody
-    public List<FolderTree> initFolder() {
-        return folderTreeService.getAllFolder();
+    public List<FolderTree> initFolder(HttpServletRequest request) {
+        return folderTreeService.getAllFolder(request);
     }
 
     /**
@@ -57,10 +58,10 @@ public class FolderTreeController {
      */
     @RequestMapping(value = "/createFolder", method = RequestMethod.POST)
     @ResponseBody
-    public FolderTree createFolder(@RequestBody FolderTree ft) {
+    public FolderTree createFolder(@RequestBody FolderTree ft, HttpServletRequest request) {
         try {
             ft.setRemarks("0");//该字段暂时作为前端文件重命名的一个判断条件，值为0，不会变的
-            if (folderTreeService.createFolderOrFile(ft)) {
+            if (folderTreeService.createFolderOrFile(ft, request)) {
                 return ft;
             }
         } catch (Exception e) {
@@ -78,9 +79,9 @@ public class FolderTreeController {
      */
     @RequestMapping(value = "/deleteFolder", method = RequestMethod.POST)
     @ResponseBody
-    public boolean deleteFolder(@RequestBody FolderTree ft) {
+    public boolean deleteFolder(@RequestBody FolderTree ft, HttpServletRequest request) {
         try {
-            return folderTreeService.deleteFolderTree(ft);
+            return folderTreeService.deleteFolderTree(ft, request);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -95,9 +96,9 @@ public class FolderTreeController {
      */
     @RequestMapping(value = "/updateLabel", method = RequestMethod.POST)
     @ResponseBody
-    public boolean updateLabel(@RequestBody FolderTree ft) {
+    public boolean updateLabel(@RequestBody FolderTree ft, HttpServletRequest request) {
         try {
-            return folderTreeService.updateLabel(ft.getId(), ft.getLabel());
+            return folderTreeService.updateLabel(ft.getId(), ft.getLabel(), request);
         } catch (Exception e) {
             e.printStackTrace();
         }
