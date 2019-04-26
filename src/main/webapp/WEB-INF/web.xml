@@ -27,4 +27,9 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+    <!--设置session过期时间为60分钟-->
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
 </web-app>

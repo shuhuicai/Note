@@ -1,13 +1,14 @@
 package com.service;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.dao.TagMapper;
 import com.entity.Tag;
-import com.vo.TagVo;
+import com.util.SessionUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author CAIYUHUI
@@ -20,51 +21,41 @@ public class TagService {
     private TagMapper tagMapper;
 
     /**
-     * 查询标签
-     * 可通过id值、创建人creator、创建时间createTime、标签内容tagContent
-     * 其中一个或多个作为条件进行查询
+     * 插入新的标签
      *
-     * @param tagVo 查询条件
-     * @return 返回查询结果
+     * @param tagContent 标签内容
+     * @param request
+     * @return
      */
-    public List<Tag> findTag(TagVo tagVo) {
-        Page<Tag> page = new Page<>();
-        page.setCurrent(tagVo.getPage());
-        page.setSize(tagVo.getPageSize());
-
-        List<Tag> res = tagMapper.findTag(page, tagVo);
-        return res;
+    public boolean addTag(String tagContent, HttpServletRequest request) throws Exception {
+        Tag tag = new Tag();
+        tag.setTagContent(tagContent);
+        tag.setCreator(SessionUtil.getCurrentUser(request));
+        return tagMapper.insert(tag) > 0;
     }
 
     /**
-     * 添加新的标签
-     * 只需给定要添加的标签的内容tagContent即可
+     * 判断用户是否创建了该标签
      *
-     * @param tag 标签信息
-     * @throws Exception 操作异常
+     * @param tagContent
+     * @param account
+     * @return true存在  false失败
      */
-    public void addTag(Tag tag) throws Exception {
-        tagMapper.insert(tag);
+    public boolean isExistTag(String tagContent, String account) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tagContent", tagContent);
+        map.put("account", account);
+        return tagMapper.isExistTag(map) > 0;
     }
 
     /**
-     * 修改指定id值的标签内容
-     * 可修改标签的内容tagContent，必须指定要修改内容的id值
+     * 获取标签id值
      *
-     * @param tagVo 修改内容
-     * @throws Exception 操作异常
+     * @param tagContent
+     * @param account
+     * @return
      */
-    public void modifyTag(TagVo tagVo) throws Exception {
-        tagMapper.updateTag(tagVo);
-    }
-
-    /**
-     * 逻辑删除指定id值的所有标签
-     *
-     * @param ids 要删除的标签id值组成的数组
-     * @throws Exception 操作异常
-     */
-    public void deleteTag(String[] ids) throws Exception {
-        tagMapper.deleteTag(ids);
+    public String getTagId(String tagContent, String account) {
+        return tagMapper.getTagId(account, tagContent);
     }
 }

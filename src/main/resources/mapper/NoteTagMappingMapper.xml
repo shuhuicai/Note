@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.NoteTagMappingMapper">
+    <select id="findAllTagByNoteId" parameterType="String" resultType="String">
+        select tag_content from t_tag t inner join t_note_tag n on t.Id=n.tag_id and n.note_id=#{noteId} and n.is_valid =1 and t.is_valid=1
+    </select>
+
+    <select id="isTagExist" parameterType="Map" resultType="int">
+        select count(*) from t_note_tag nt where nt.note_id=#{noteId} and nt.tag_id=#{tagId} and nt.is_valid=1
+    </select>
+</mapper>

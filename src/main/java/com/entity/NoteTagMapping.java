@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
  * @create 2018/09/15 13:38
  **/
 @TableName("t_note_tag")
-public class NoteTag extends BaseEntity {
+public class NoteTagMapping extends BaseEntity {
     private String noteId; //笔记Id
     private String tagId;  //标签Id
 
