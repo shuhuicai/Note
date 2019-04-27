@@ -63,4 +63,15 @@ public class NoteTagMappingService {
         map.put("tagId", tagId);
         return noteTagMappingMapper.isTagExist(map) > 0;
     }
+
+    /**
+     * 删除指定笔记的标签
+     *
+     * @param tagContent
+     * @param noteId
+     * @return
+     */
+    public boolean deleteTagInNote(String tagContent, String noteId, HttpServletRequest request) throws Exception {
+        return noteTagMappingMapper.deleteTagInNote(tagContent, noteId, SessionUtil.getCurrentUser(request)) > 0;
+    }
 }

@@ -2,6 +2,7 @@ package com.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.entity.NoteTagMapping;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,4 +31,14 @@ public interface NoteTagMappingMapper extends BaseMapper<NoteTagMapping> {
      * @return
      */
     int isTagExist(Map<String, String> map);
+
+    /**
+     * 根据标签内容和创建人查询出该标签并删除
+     *
+     * @param tagContent
+     * @param creator
+     * @param noteId
+     * @return
+     */
+    int deleteTagInNote(@Param("tagContent") String tagContent, @Param("noteId") String noteId, @Param("creator") String creator);
 }

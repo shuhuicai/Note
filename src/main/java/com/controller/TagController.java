@@ -64,4 +64,23 @@ public class TagController {
     public List<String> getAllTag(String noteId) {
         return noteTagMappingService.queryTagByNoteId(noteId);
     }
+
+    /**
+     * 删除笔记的标签
+     *
+     * @param noteId
+     * @param tagContent
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/deleteTagInNote", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean deleteTagInNote(String noteId, String tagContent, HttpServletRequest request) {
+        try {
+            return noteTagMappingService.deleteTagInNote(tagContent, noteId, request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
