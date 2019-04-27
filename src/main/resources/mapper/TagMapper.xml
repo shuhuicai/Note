@@ -10,4 +10,12 @@
     <select id="getTagId" parameterType="String" resultType="String">
         select id from t_tag t where t.creator=#{account} and t.tag_content=#{tagContent} and t.is_valid=1
     </select>
+
+    <select id="getUserTag" parameterType="String" resultMap="tagMap">
+        select tag_content from t_tag where is_valid=1 and creator=#{account}
+    </select>
+
+    <resultMap id="tagMap" type="com.vo.TagVo">
+        <result column="tag_content" property="label"/>
+    </resultMap>
 </mapper>

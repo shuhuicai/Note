@@ -3,11 +3,13 @@ package com.service;
 import com.dao.TagMapper;
 import com.entity.Tag;
 import com.util.SessionUtil;
+import com.vo.TagVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,5 +59,15 @@ public class TagService {
      */
     public String getTagId(String tagContent, String account) {
         return tagMapper.getTagId(account, tagContent);
+    }
+
+    /**
+     * 获取指定用户的所有标签
+     *
+     * @param request
+     * @return
+     */
+    public List<TagVo> getUserTags(HttpServletRequest request) {
+        return tagMapper.getUserTag(SessionUtil.getCurrentUser(request));
     }
 }

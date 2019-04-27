@@ -2,9 +2,11 @@ package com.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.entity.Tag;
+import com.vo.TagVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,4 +33,12 @@ public interface TagMapper extends BaseMapper<Tag> {
      * @return
      */
     String getTagId(@Param("account") String account, @Param("tagContent") String tagContent);
+
+    /**
+     * 查询用户的所有标签
+     *
+     * @param account
+     * @return
+     */
+    List<TagVo> getUserTag(String account);
 }

@@ -3,6 +3,7 @@ package com.controller;
 import com.service.NoteTagMappingService;
 import com.service.TagService;
 import com.util.SessionUtil;
+import com.vo.TagVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -82,5 +83,17 @@ public class TagController {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * 获取用户的所有标签
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getTags", method = RequestMethod.POST)
+    @ResponseBody
+    public List<TagVo> getTags(HttpServletRequest request) {
+        return tagService.getUserTags(request);
     }
 }
