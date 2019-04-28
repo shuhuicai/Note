@@ -50,4 +50,13 @@ public interface FolderTreeMapper extends BaseMapper<FolderTree> {
      * @return 返回成功与否
      */
     int updateLabelById(Map<String, String> map);
+
+    /**
+     * 查询具有该标签的笔记
+     *
+     * @param creator
+     * @param tagContent 标签内容
+     * @return
+     */
+    List<FolderTree> findNoteByTag(@Param("creator") String creator, @Param("tagContent") String tagContent);
 }

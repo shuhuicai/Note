@@ -133,6 +133,17 @@ public class FolderTreeService {
     }
 
     /**
+     * 查询具有该标签的所有笔记
+     *
+     * @param tagContent
+     * @param request
+     * @return
+     */
+    public List<FolderTree> queryNoteByTag(String tagContent, HttpServletRequest request) {
+        return folderTreeMapper.findNoteByTag(SessionUtil.getCurrentUser(request), tagContent);
+    }
+
+    /**
      * 从FolderTree对象中获取Id值
      *
      * @param ft 参数

@@ -29,6 +29,12 @@
         update t_folder_tree t set t.modify_time=(select now()),t.label=#{label},t.modifier=#{modifier} where t.Id=#{id}
     </update>
 
+    <select id="findNoteByTag" parameterType="String" resultMap="folderMap">
+        select * from t_folder_tree t where t.is_valid=1 and t.creator=#{creator} and t.id in
+        (select nt.note_id from t_note_tag nt where nt.creator=#{creator} and nt.is_valid=1 and
+         nt.tag_id=(select g.id from t_tag g where g.creator=#{creator} and g.is_valid=1 and g.tag_content=#{tagContent}))
+    </select>
+
     <resultMap id="folderMap" type="com.entity.FolderTree">
         <result property="id" column="Id"/>
         <result property="creator" column="creator"/>

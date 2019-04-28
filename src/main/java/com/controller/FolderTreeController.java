@@ -104,4 +104,17 @@ public class FolderTreeController {
         }
         return false;
     }
+
+    /**
+     * 查询具有该标签的所有笔记信息
+     *
+     * @param tagContent
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/queryNoteByTag", method = RequestMethod.POST)
+    @ResponseBody
+    public List<FolderTree> queryNoteByTag(String tagContent, HttpServletRequest request) {
+        return folderTreeService.queryNoteByTag(tagContent, request);
+    }
 }

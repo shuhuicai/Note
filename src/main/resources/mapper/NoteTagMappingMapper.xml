@@ -15,9 +15,4 @@
         update t_note_tag t set t.modify_time=(select now()),t.is_valid=0,t.modifier=#{creator} where t.creator=#{creator} and t.note_id=#{noteId}
         and t.tag_id=(select id from t_tag tt where tt.tag_content=#{tagContent} and tt.creator=#{creator})
     </update>
-
-    <!--update t_folder_tree t set t.modify_time=(select now()), t.is_valid=0,t.modifier=#{modifier} where t.Id in
-    <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
-        #{item}
-    </foreach>-->
 </mapper>
