@@ -9,6 +9,7 @@ import com.service.FileUrlMappingService;
 import com.service.FolderTreeService;
 import com.service.NoteContentService;
 import com.vo.NoteParamVo;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -197,5 +198,16 @@ public class FileController {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * 导出笔记
+     *
+     * @param id 笔记id
+     * @return
+     */
+    @RequestMapping(value = "/exportNote", method = {RequestMethod.POST})
+    public ResponseEntity<byte[]> exportNote(String id) {
+        return noteContentService.exportNote(id);
     }
 }
