@@ -25,9 +25,9 @@ public class OutputPDF {
     }
 
     /**
-     * 将内容拼接成html文件
+     * 将笔记内容拼接成html文件
      */
-    private void produceHtml() {
+    public void produceHtml() {
         String prefix = "<!DOCTYPE html><html><head><meta charset='utf-8' /><title>HTML to PDF</title></head><body>";
         String suffix = "</body></html>";
         try (FileWriter writer = new FileWriter(htmlPath())) {

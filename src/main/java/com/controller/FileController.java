@@ -170,7 +170,7 @@ public class FileController {
     }
 
     /**
-     * 删除笔记内容和名字
+     * 修改笔记内容和名字
      *
      * @param noteParamVo id content label
      * @return true or false
@@ -209,5 +209,48 @@ public class FileController {
     @RequestMapping(value = "/exportNote", method = {RequestMethod.POST})
     public ResponseEntity<byte[]> exportNote(String id) {
         return noteContentService.exportNote(id);
+    }
+
+    /**
+     * 生成分享链接
+     *
+     * @param id
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/shareNote", method = {RequestMethod.POST})
+    @ResponseBody
+    public String shareNote(String id, HttpServletRequest request) {
+        NoteParamVo note = noteContentService.queryNoteInfo(id);
+        String path = fileService.noteToHtml(note);//将笔记转化为html文件
+        note.setShareUrl(path);
+        try {
+            note.setId(id);
+            if (noteContentService.updateNote(note, request)) {
+                return '"' + localIP + "file/getShareNote?id=" + id + '"';//加上双引号,不然前端json解析会出错
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "2333";
+    }
+
+    /**
+     * 获取分享的页面
+     *
+     * @param id
+     * @param response
+     */
+    @RequestMapping(value = "/getShareNote", method = {RequestMethod.GET})
+    public void getShareNote(String id, HttpServletResponse response) {
+        NoteParamVo note = noteContentService.queryNoteInfo(id);
+        String savePath = note.getShareUrl();
+        if (savePath != null) {
+            try {
+                fileService.getFile(savePath, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

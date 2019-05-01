@@ -12,6 +12,15 @@ import com.baomidou.mybatisplus.annotations.TableName;
 public class NoteContent extends BaseEntity {
     private String fileId; //该笔记目录名Id
     private String noteContent;//笔记内容
+    private String shareUrl;//分享的URL
+
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
+    }
 
     public String getFileId() {
         return fileId;

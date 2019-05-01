@@ -38,7 +38,6 @@ public class NoteContentService {
      * @throws Exception
      */
     public boolean addNoteContent(NoteContent note, HttpServletRequest request) throws Exception {
-        note.setModifier(SessionUtil.getCurrentUser(request));
         note.setCreator(SessionUtil.getCurrentUser(request));
         return noteContentMapper.insert(note) > 0;
     }
@@ -68,6 +67,7 @@ public class NoteContentService {
         Map<String, String> map = new HashMap<>();
         map.put("content", noteParamVo.getContent());
         map.put("id", noteParamVo.getId());
+        map.put("shareUrl", noteParamVo.getShareUrl());
         map.put("modifier", SessionUtil.getCurrentUser(request));
         return noteContentMapper.updateNote(map) > 0;
     }
@@ -102,4 +102,5 @@ public class NoteContentService {
         }
         return null;
     }
+
 }

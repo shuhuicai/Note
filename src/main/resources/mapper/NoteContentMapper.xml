@@ -5,15 +5,27 @@
 <mapper namespace="com.dao.NoteContentMapper">
 
     <select id="queryNoteInfo" parameterType="String" resultMap="initMap">
-        select f.label,n.note_content from t_folder_tree f inner join t_note_content n on f.id=n.file_id and f.id=#{id}
+        select f.label,n.note_content,n.share_url from t_folder_tree f inner join t_note_content n on f.id=n.file_id and f.id=#{id}
     </select>
 
     <resultMap id="initMap" type="com.vo.NoteParamVo">
         <result property="label" column="label"/>
         <result property="content" column="note_content"/>
+        <result property="shareUrl" column="share_url"/>
     </resultMap>
 
     <update id="updateNote" parameterType="Map">
-        update t_note_content t set t.modify_time=(select now()), t.note_content=#{content},t.modifier=#{modifier} where t.file_id=#{id}
+        update t_note_content t
+        <set>
+            t.modify_time=(select now()),
+            <if test="content!=null">
+                t.note_content=#{content},
+            </if>
+            <if test="shareUrl!=null">
+                t.share_url=#{shareUrl},
+            </if>
+            t.modifier=#{modifier}
+        </set>
+        where t.file_id=#{id}
     </update>
 </mapper>

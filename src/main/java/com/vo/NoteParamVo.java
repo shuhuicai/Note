@@ -11,6 +11,15 @@ public class NoteParamVo {
     private String content;
     private String label;//笔记名
     private String id;
+    private String shareUrl;
+
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
+    }
 
     public String getId() {
         return id;

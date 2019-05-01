@@ -1,5 +1,7 @@
 package com.service;
 
+import com.util.OutputPDF;
+import com.vo.NoteParamVo;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,5 +61,17 @@ public class FileService {
             }
             os.flush();
         }
+    }
+
+    /**
+     * 将笔记转化为Html文件并保存
+     *
+     * @param note 笔记内容和名字
+     * @return 返回文件保存的路径
+     */
+    public String noteToHtml(NoteParamVo note) {
+        OutputPDF util = new OutputPDF(note.getContent(), note.getLabel());
+        util.produceHtml();//保存
+        return util.htmlPath();
     }
 }
