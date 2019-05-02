@@ -6,6 +6,7 @@ import com.itextpdf.tool.xml.XMLWorkerHelper;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import static com.util.Constant.filePath;
 
@@ -30,8 +31,8 @@ public class OutputPDF {
     public void produceHtml() {
         String prefix = "<!DOCTYPE html><html><head><meta charset='utf-8' /><title>HTML to PDF</title></head><body>";
         String suffix = "</body></html>";
-        try (FileWriter writer = new FileWriter(htmlPath())) {
-            writer.write(prefix + content + suffix);
+        try (FileOutputStream fos = new FileOutputStream(htmlPath())) {
+            fos.write((prefix + content + suffix).getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
         }
