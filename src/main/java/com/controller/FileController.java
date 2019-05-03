@@ -8,6 +8,7 @@ import com.service.FileService;
 import com.service.FileUrlMappingService;
 import com.service.FolderTreeService;
 import com.service.NoteContentService;
+import com.util.SessionUtil;
 import com.vo.NoteParamVo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -54,7 +55,8 @@ public class FileController {
      */
     @RequestMapping(value = "/saveFile", method = RequestMethod.POST)
     @ResponseBody
-    public ResultBean<FolderTree> saveFile(@RequestBody MultipartFile file, String parentId, int fileType, HttpServletRequest request) {
+    public ResultBean<FolderTree> saveFile(@RequestBody MultipartFile file, String parentId, int fileType, String creator, HttpServletRequest request) {
+        SessionUtil.getSession(request).setAttribute("username", creator);
         String fileName = file.getOriginalFilename();
         FolderTree ft = new FolderTree();
         ResultBean<FolderTree> res = new ResultBean<>();
