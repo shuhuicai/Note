@@ -3,6 +3,7 @@ package com.util;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
+import org.jsoup.Jsoup;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -16,11 +17,11 @@ import static com.util.Constant.filePath;
  * @author CAIYUHUI
  * @create 2019/05/01 16:23
  **/
-public class OutputPDF {
+public class TransformFile {
     private String content;//笔记内容
     private String name;//笔记名
 
-    public OutputPDF(String content, String name) {
+    public TransformFile(String content, String name) {
         this.content = content;
         this.name = name;
     }
@@ -29,10 +30,12 @@ public class OutputPDF {
      * 将笔记内容拼接成html文件
      */
     public void produceHtml() {
-        String prefix = "<!DOCTYPE html><html><head><meta charset='utf-8' /><title>HTML to PDF</title></head><body>";
+        String prefix = "<!DOCTYPE html><html><head><title>HTML to PDF</title></head><body>";
         String suffix = "</body></html>";
+        String fileContent = prefix + content + suffix;
+        fileContent = Jsoup.parse(fileContent).html();
         try (FileOutputStream fos = new FileOutputStream(htmlPath())) {
-            fos.write((prefix + content + suffix).getBytes(StandardCharsets.UTF_8));
+            fos.write(fileContent.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
         }

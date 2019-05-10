@@ -2,7 +2,7 @@ package com.service;
 
 import com.dao.NoteContentMapper;
 import com.entity.NoteContent;
-import com.util.OutputPDF;
+import com.util.TransformFile;
 import com.util.SessionUtil;
 import com.vo.NoteParamVo;
 import org.apache.commons.io.FileUtils;
@@ -81,7 +81,7 @@ public class NoteContentService {
         NoteParamVo note = queryNoteInfo(noteId);
         String name = note.getLabel();
         if (name != null && note.getContent() != null) {
-            OutputPDF util = new OutputPDF(note.getContent(), name);
+            TransformFile util = new TransformFile(note.getContent(), name);
             util.produce();//生成pdf文件
 
             File file = new File(util.pdfPath());
